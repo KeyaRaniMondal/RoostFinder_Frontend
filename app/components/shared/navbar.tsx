@@ -81,51 +81,51 @@ export function Navbar() {
 
               {/* User Menu */}
               {/* {userRole ? ( */}
-                <div className="relative group">
-                  <button className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors dark:text-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700">
-                    <User className="w-4 h-4" />
-                    {/* <span className="hidden sm:inline capitalize">{userRole}</span> */}
-                  </button>
-                  
-                  {/* Dropdown Menu */}
-                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-slate-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 dark:bg-slate-900 dark:border-slate-800">
-                    <div className="py-2">
-                      <Link
-                        href="/profile"
-                        className="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800"
-                      >
-                        Profile Settings
-                      </Link>
-                      <button
-                        // onClick={() => setUserRole(null)}
-                        className="w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800 flex items-center gap-2"
-                      >
-                        <LogOut className="w-4 h-4" />
-                        Logout
-                      </button>
-                    </div>
+              <div className="relative group">
+                <button className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors dark:text-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700">
+                  <User className="w-4 h-4" />
+                  {/* <span className="hidden sm:inline capitalize">{userRole}</span> */}
+                </button>
+
+                {/* Dropdown Menu */}
+                <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-slate-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 dark:bg-slate-900 dark:border-slate-800">
+                  <div className="py-2">
+                    <Link
+                      href="/profile"
+                      className="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800"
+                    >
+                      Profile Settings
+                    </Link>
+                    <button
+                      // onClick={() => setUserRole(null)}
+                      className="w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800 flex items-center gap-2"
+                    >
+                      <LogOut className="w-4 h-4" />
+                      Logout
+                    </button>
                   </div>
                 </div>
+              </div>
               {/* ) : ( */}
-                <div className="hidden sm:flex gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    // onClick={() => setUserRole('tenant')}
-                    className="text-slate-700 border-slate-300 hover:bg-slate-50 dark:text-slate-300 dark:border-slate-600 dark:hover:bg-slate-900"
-                  >
-                        <Link href="/register">
-      Sign In
-    </Link>
-                  </Button>
-                  <Button
-                    size="sm"
-                    // onClick={() => setUserRole('landlord')}
-                    className="bg-blue-600 hover:bg-blue-700 text-white"
-                  >
-                    List Property
-                  </Button>
-                </div>
+              <div className="hidden sm:flex gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  // onClick={() => setUserRole('tenant')}
+                  className="text-slate-700 border-slate-300 hover:bg-slate-50 dark:text-slate-300 dark:border-slate-600 dark:hover:bg-slate-900"
+                >
+                  <Link href="/register">
+                    Sign In
+                  </Link>
+                </Button>
+                <Button
+                  size="sm"
+                  // onClick={() => setUserRole('landlord')}
+                  className="bg-blue-600 hover:bg-blue-700 text-white"
+                >
+                  List Property
+                </Button>
+              </div>
               {/* )} */}
 
               {/* Mobile Menu Button */}
@@ -160,65 +160,65 @@ export function Navbar() {
 
               {/* Mobile Auth Buttons */}
               {/* {!userRole && ( */}
-                <div className="pt-4 border-t border-slate-200 dark:border-slate-800 space-y-2">
-                  <Button
-                    variant="outline"
-                    className="w-full text-slate-700 border-slate-300 hover:bg-white dark:text-slate-300 dark:border-slate-600 dark:hover:bg-slate-800"
-                    onClick={() => {
-                      // setUserRole('tenant');
-                      setIsOpen(false);
-                    }}
-                  >
-                    Sign In as Tenant
-                  </Button>
-                  <Button
-                    className="w-full bg-blue-600 hover:bg-blue-700 text-white"
-                    onClick={() => {
-                      // setUserRole('landlord');
-                      setIsOpen(false);
-                    }}
-                  >
-                    List Property (Landlord)
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    className="w-full text-slate-600 hover:text-blue-600 dark:text-slate-400 dark:hover:text-blue-400"
-                    onClick={() => {
-                      // setUserRole('admin');
-                      setIsOpen(false);
-                    }}
-                  >
-                    Admin Access
-                  </Button>
-                </div>
+              <div className="pt-4 border-t border-slate-200 dark:border-slate-800 space-y-2">
+                <Button
+                  variant="outline"
+                  className="w-full text-slate-700 border-slate-300 hover:bg-white dark:text-slate-300 dark:border-slate-600 dark:hover:bg-slate-800"
+                  onClick={() => {
+                    // setUserRole('tenant');
+                    setIsOpen(false);
+                  }}
+                >
+                  Sign In as Tenant
+                </Button>
+                <Button
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+                  onClick={() => {
+                    // setUserRole('landlord');
+                    setIsOpen(false);
+                  }}
+                >
+                  List Property (Landlord)
+                </Button>
+                <Button
+                  variant="ghost"
+                  className="w-full text-slate-600 hover:text-blue-600 dark:text-slate-400 dark:hover:text-blue-400"
+                  onClick={() => {
+                    // setUserRole('admin');
+                    setIsOpen(false);
+                  }}
+                >
+                  Admin Access
+                </Button>
+              </div>
               {/* )} */}
 
               {/* Mobile User Menu */}
               {/* {userRole && ( */}
-                <div className="pt-4 border-t border-slate-200 dark:border-slate-800 space-y-2">
-                  <div className="px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-300">
-                    {/* {userRole === 'landlord' && 'Landlord Dashboard'}
+              <div className="pt-4 border-t border-slate-200 dark:border-slate-800 space-y-2">
+                <div className="px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-300">
+                  {/* {userRole === 'landlord' && 'Landlord Dashboard'}
                     {userRole === 'tenant' && 'Tenant Dashboard'}
                     {userRole === 'admin' && 'Admin Panel'} */}
-                  </div>
-                  <Link
-                    href="/profile"
-                    className="block px-4 py-2 text-sm text-slate-700 hover:text-blue-600 dark:text-slate-300 dark:hover:text-blue-400"
-                    onClick={() => setIsOpen(false)}
-                  >
-                    Profile Settings
-                  </Link>
-                  <button
-                    onClick={() => {
-                      // setUserRole(null);
-                      setIsOpen(false);
-                    }}
-                    className="w-full text-left px-4 py-2 text-sm text-slate-700 hover:text-blue-600 dark:text-slate-300 dark:hover:text-blue-400 flex items-center gap-2"
-                  >
-                    <LogOut className="w-4 h-4" />
-                    Logout
-                  </button>
                 </div>
+                <Link
+                  href="/profile"
+                  className="block px-4 py-2 text-sm text-slate-700 hover:text-blue-600 dark:text-slate-300 dark:hover:text-blue-400"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Profile Settings
+                </Link>
+                <button
+                  onClick={() => {
+                    // setUserRole(null);
+                    setIsOpen(false);
+                  }}
+                  className="w-full text-left px-4 py-2 text-sm text-slate-700 hover:text-blue-600 dark:text-slate-300 dark:hover:text-blue-400 flex items-center gap-2"
+                >
+                  <LogOut className="w-4 h-4" />
+                  Logout
+                </button>
+              </div>
               {/* )} */}
             </div>
           </div>

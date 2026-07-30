@@ -5,8 +5,14 @@ import { registerSchema } from "@/lib/validations/auth";
 export type RegisterActionState = {
   success: boolean;
   message?: string;
-  errors?: Partial<Record<"name" | "email" | "password" | "confirmPassword" | "terms", string>>;
+  errors?: Partial<
+    Record<"name" | "email" | "password" | "confirmPassword" | "role" | "terms", string>
+  >;
 };
+
+// Server-side only — no NEXT_PUBLIC_ prefix, so it's never exposed to the browser.
+// Set this in .env.local, e.g. API_BASE_URL=http://localhost:5000
+const API_BASE_URL = process.env.API_BASE_URL ?? "http://localhost:5000";
 
 export async function registerUser(
   _prevState: RegisterActionState,
@@ -18,6 +24,7 @@ export async function registerUser(
     email: formData.get("email"),
     password: formData.get("password"),
     confirmPassword: formData.get("confirmPassword"),
+    role: formData.get("role") || "tenant",
     terms: formData.get("terms") === "on" || formData.get("terms") === "true",
   };
 
@@ -34,38 +41,46 @@ export async function registerUser(
     return { success: false, errors: fieldErrors };
   }
 
-  const { name, email, password } = parsed.data;
+  const { name, email, password, role } = parsed.data;
 
   try {
-    // Replace with your real logic: hash the password, check for
-    // an existing user, write to your database, etc.
-    const existingUser = await findUserByEmail(email);
-    if (existingUser) {
+    const response = await fetch(`${API_BASE_URL}/api/auth/register`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, email, password, role }),
+      cache: "no-store",
+    });
+
+    const data = await response.json().catch(() => null);
+
+    if (!response.ok) {
+      // Adjust this block to match your backend's actual error shape.
+      // Handles a few common patterns: { errors: { field: msg } }, { field, message },
+      // or a plain { message }.
+      if (data?.errors && typeof data.errors === "object") {
+        return { success: false, errors: data.errors };
+      }
+      if (data?.field && data?.message) {
+        return { success: false, errors: { [data.field]: data.message } };
+      }
+      if (response.status === 409) {
+        return {
+          success: false,
+          errors: { email: data?.message ?? "An account with this email already exists" },
+        };
+      }
       return {
         success: false,
-        errors: { email: "An account with this email already exists" },
+        message: data?.message ?? "Registration failed. Please try again.",
       };
     }
 
-    await createUser({ name, email, password });
-
-    return { success: true, message: "Account created successfully" };
+    return { success: true, message: data?.message ?? "Account created successfully" };
   } catch (error) {
-    console.error("Registration failed:", error);
+    console.error("Registration request failed:", error);
     return {
       success: false,
-      message: "Something went wrong. Please try again.",
+      message: "Could not reach the server. Please try again.",
     };
   }
-}
-
-// --- Stubs: swap these for your real database/((auth)) layer ---
-
-async function findUserByEmail(_email: string): Promise<{ id: string } | null> {
-  return null;
-}
-
-async function createUser(_data: { name: string; email: string; password: string }) {
-  // e.g. await db.user.create({ data: { ...data, password: await hash(data.password) } });
-  return;
 }

@@ -3,7 +3,7 @@
 import { useEffect, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { registerSchema, type RegisterFormValues } from "@/lib/validations/auth";
+import { registerSchema, ROLES, type RegisterFormValues } from "@/lib/validations/auth";
 import { registerUser, type RegisterActionState } from "@/app/(auth)/_actions/authActions";
 
 const initialState: RegisterActionState = { success: false };
@@ -21,8 +21,8 @@ export function RegisterForm() {
     } = useForm<RegisterFormValues>({
         resolver: zodResolver(registerSchema),
         mode: "onBlur",
+        defaultValues: { role: "tenant" },
     });
-
 
     useEffect(() => {
         if (actionState.errors) {
@@ -38,6 +38,7 @@ export function RegisterForm() {
         formData.set("email", values.email);
         formData.set("password", values.password);
         formData.set("confirmPassword", values.confirmPassword);
+        formData.set("role", values.role ?? "tenant");
         formData.set("terms", String(values.terms));
 
         startTransition(async () => {
@@ -63,8 +64,7 @@ export function RegisterForm() {
                 <label htmlFor="name" className="mb-1.5 block text-sm font-medium text-gray-900">
                     Full name
                 </label>
-                <input
-                    id="name"
+                <input id="name"
                     type="text"
                     autoComplete="name"
                     aria-invalid={!!errors.name}
@@ -164,6 +164,36 @@ export function RegisterForm() {
                     <p id="confirmPassword-error" className="mt-1 text-xs text-red-600">
                         {errors.confirmPassword.message}
                     </p>
+                )}
+            </div>
+
+            {/* Role */}
+            <div>
+                <label htmlFor="role" className="mb-1.5 block text-sm font-medium text-gray-900">
+                    Account type
+                </label>
+                <select
+                    id="role"
+                    aria-invalid={!!errors.role}
+                    aria-describedby={errors.role ? "role-error" : undefined}
+                    {...register("role")}
+                    className={`w-full rounded-md border bg-white px-3 py-2 text-sm shadow-sm outline-none transition focus:ring-2 focus:ring-offset-0 ${errors.role
+                            ? "border-red-400 focus:border-red-500 focus:ring-red-100"
+                            : "border-gray-300 focus:border-gray-900 focus:ring-gray-100"
+                        }`}
+                >
+                    {ROLES.map((role) => (
+                        <option key={role} value={role}>
+                            {role.charAt(0).toUpperCase() + role.slice(1)}
+                        </option>
+                    ))}
+                </select>
+                {errors.role ? (
+                    <p id="role-error" className="mt-1 text-xs text-red-600">
+                        {errors.role.message}
+                    </p>
+                ) : (
+                    <p className="mt-1 text-xs text-gray-500">Defaults to Tenant if not changed.</p>
                 )}
             </div>
 

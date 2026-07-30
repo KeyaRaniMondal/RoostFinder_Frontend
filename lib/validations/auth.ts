@@ -1,5 +1,8 @@
 import { z } from "zod";
 
+export const ROLES = ["tenant", "landlord", "admin"] as const;
+export type Role = (typeof ROLES)[number];
+
 export const registerSchema = z
     .object({
         name: z
@@ -19,15 +22,19 @@ export const registerSchema = z
             .regex(/[a-z]/, "Password must include a lowercase letter")
             .regex(/[0-9]/, "Password must include a number"),
         confirmPassword: z.string().min(1, "Please confirm your password"),
-        terms: z
-            .boolean()
-            .refine((val) => val === true, {
-                message: "You must accept the terms to continue",
-            }),
+        role: z
+            .enum(ROLES, {
+                message: "Select a valid role",
+            })
+            .default("tenant"),
+        terms: z.literal(true, {
+            message: "You must accept the terms to continue",
+        }),
     })
     .refine((data) => data.password === data.confirmPassword, {
         message: "Passwords do not match",
         path: ["confirmPassword"],
     });
 
-export type RegisterFormValues = z.infer<typeof registerSchema>;
+export type RegisterFormValues = z.input<typeof registerSchema>;
+export type RegisterFormOutput = z.output<typeof registerSchema>;
