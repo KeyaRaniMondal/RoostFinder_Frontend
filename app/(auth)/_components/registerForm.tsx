@@ -3,8 +3,8 @@
 import { useEffect, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { registerSchema, ROLES, type RegisterFormValues } from "@/lib/validations/auth";
-import { registerUser, type RegisterActionState } from "@/app/(auth)/_actions/authActions";
+import { registerSchema, ROLES, type RegisterFormValues } from "@/lib/validations/registerAuth";
+import { registerUser, type RegisterActionState } from "@/app/(auth)/_actions/authActionsRegister";
 
 const initialState: RegisterActionState = { success: false };
 

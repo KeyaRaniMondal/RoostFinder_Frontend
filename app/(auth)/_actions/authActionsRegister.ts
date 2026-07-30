@@ -1,6 +1,6 @@
 "use server";
 
-import { registerSchema } from "@/lib/validations/auth";
+import { registerSchema } from "@/lib/validations/registerAuth";
 
 export type RegisterActionState = {
   success: boolean;
@@ -10,15 +10,13 @@ export type RegisterActionState = {
   >;
 };
 
-// Server-side only — no NEXT_PUBLIC_ prefix, so it's never exposed to the browser.
-// Set this in .env.local, e.g. API_BASE_URL=http://localhost:5000
 const API_BASE_URL = process.env.API_BASE_URL ?? "http://localhost:5000";
 
 export async function registerUser(
   _prevState: RegisterActionState,
   formData: FormData
 ): Promise<RegisterActionState> {
-  // Re-parse raw form data on the server — never trust client-side validation alone.
+
   const raw = {
     name: formData.get("name"),
     email: formData.get("email"),
@@ -54,9 +52,6 @@ export async function registerUser(
     const data = await response.json().catch(() => null);
 
     if (!response.ok) {
-      // Adjust this block to match your backend's actual error shape.
-      // Handles a few common patterns: { errors: { field: msg } }, { field, message },
-      // or a plain { message }.
       if (data?.errors && typeof data.errors === "object") {
         return { success: false, errors: data.errors };
       }
