@@ -1,71 +1,111 @@
 "use server";
 
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import { loginSchema } from "@/lib/validations/loginAuth";
 
 export type LoginActionState = {
-  success: boolean;
-  message?: string;
-  errors?: Partial<Record<"email" | "password", string>>;
+    success: boolean;
+    message?: string;
+    errors?: Partial<Record<"email" | "password", string>>;
 };
 
-const API_BASE_URL = process.env.API_BASE_URL ?? "http://localhost:5000";
+const API_BASE_URL =
+    process.env.API_BASE_URL ?? "http://localhost:5000";
 
 export async function loginUser(
-  _prevState: LoginActionState,
-  formData: FormData
+    _prevState: LoginActionState,
+    formData: FormData
 ): Promise<LoginActionState> {
-  const raw = {
-    email: formData.get("email"),
-    password: formData.get("password"),
-  };
 
-  const parsed = loginSchema.safeParse(raw);
-
-  if (!parsed.success) {
-    const errors: LoginActionState["errors"] = {};
-
-    parsed.error.issues.forEach((issue) => {
-      const key = issue.path[0] as "email" | "password";
-      if (!errors[key]) {
-        errors[key] = issue.message;
-      }
-    });
-
-    return {
-      success: false,
-      errors,
+    const raw = {
+        email: formData.get("email"),
+        password: formData.get("password"),
     };
-  }
 
-  try {
-    const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(parsed.data),
-      cache: "no-store",
-    });
+    const parsed = loginSchema.safeParse(raw);
 
-    const data = await response.json();
+    if (!parsed.success) {
+        const errors: LoginActionState["errors"] = {};
 
-    if (!response.ok) {
-      return {
-        success: false,
-        message: data?.message || "Login failed",
-      };
+        for (const issue of parsed.error.issues) {
+            const key =
+                issue.path[0] as keyof NonNullable<LoginActionState["errors"]>;
+
+            if (key && !errors[key]) {
+                errors[key] = issue.message;
+            }
+        }
+
+        return {
+            success: false,
+            errors,
+        };
     }
 
-    return {
-      success: true,
-      message: data?.message || "Login successful",
-    };
-  } catch (error) {
-    console.error(error);
+    try {
 
-    return {
-      success: false,
-      message: "Unable to connect to the server.",
-    };
-  }
+        const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(parsed.data),
+            cache: "no-store",
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            return {
+                success: false,
+                message: result.message ?? "Login failed",
+            };
+        }
+
+        const accessToken = result?.data?.accessToken;
+        const refreshToken = result?.data?.refreshToken;
+
+        if (!accessToken || !refreshToken) {
+            return {
+                success: false,
+                message: "Authentication tokens not received.",
+            };
+        }
+
+        const cookieStore = await cookies();
+
+        cookieStore.set("accessToken", accessToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "lax",
+            path: "/",
+            maxAge: 60 * 60 * 24,
+        });
+
+        cookieStore.set("refreshToken", refreshToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "lax",
+            path: "/",
+            maxAge: 60 * 60 * 24 * 7,
+        });
+
+        redirect("/dashboard");
+    } catch (error) {
+        console.error(error);
+
+        return {
+            success: false,
+            message: "Unable to connect to server.",
+        };
+    }
+}
+
+export async function logoutUser() {
+    const cookieStore = await cookies();
+    cookieStore.delete("accessToken");
+    cookieStore.delete("refreshToken");
+
+    redirect("/login");
 }
