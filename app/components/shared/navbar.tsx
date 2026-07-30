@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { Menu, X, Home, User, Settings, LogOut, Bell, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-
 // type UserRole = 'admin' | 'landlord' | 'tenant' | null;
 
 export function Navbar() {
@@ -55,7 +54,7 @@ export function Navbar() {
                 <Home className="w-6 h-6 text-white" />
               </div>
               <span className="text-xl font-bold text-slate-900 dark:text-white hidden sm:inline">
-                PropertyRent
+                RoostFinder
               </span>
             </Link>
 
@@ -115,7 +114,9 @@ export function Navbar() {
                     // onClick={() => setUserRole('tenant')}
                     className="text-slate-700 border-slate-300 hover:bg-slate-50 dark:text-slate-300 dark:border-slate-600 dark:hover:bg-slate-900"
                   >
-                    Sign In
+                        <Link href="/register">
+      Sign In
+    </Link>
                   </Button>
                   <Button
                     size="sm"
