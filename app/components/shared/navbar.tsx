@@ -15,35 +15,34 @@ const NAV_ITEMS: Record<"general" | Role, NavItem[]> = {
     { href: "/browse", label: "Browse Properties" },
   ],
   landlord: [
-    // { href: "/dashboard/landlord", label: "Dashboard" },
-    // { href: "/properties", label: "My Properties" },
-    // { href: "/requests", label: "Rental Requests" },
+    { href: "/dashboard/landlord", label: "Dashboard" },
+    { href: "/properties", label: "My Properties" },
+    { href: "/requests", label: "Rental Requests" },
   ],
   tenant: [
-    // { href: "/dashboard/tenant", label: "Dashboard" },
-    // { href: "/my-requests", label: "My Requests" },
-    // { href: "/bookmarks", label: "Saved Properties" },
+    { href: "/dashboard/tenant", label: "Dashboard" },
+    { href: "/my-requests", label: "My Requests" },
+    { href: "/bookmarks", label: "Saved Properties" },
   ],
   admin: [
-    // { href: "/admin", label: "Admin Panel" },
-    // { href: "/admin/moderation", label: "Moderation" },
-    // { href: "/admin/users", label: "Users" },
+    { href: "/admin", label: "Admin Panel" },
+    { href: "/admin/moderation", label: "Moderation" },
+    { href: "/admin/users", label: "Users" },
   ],
 };
 
 type NavbarProps = {
   isAuthenticated: boolean;
   role: Role | null;
-  /** Server Action — passed down from a Server Component parent, called directly as a form action. */
+  name?: string | null;
   logoutAction: () => Promise<void>;
 };
 
-export function Navbar({ isAuthenticated, role, logoutAction }: NavbarProps) {
+export function Navbar({ isAuthenticated, role, name, logoutAction }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const pathname = usePathname();
 
-  // General links always show; role-specific links are appended once we know who's logged in.
   const navItems = [
     ...NAV_ITEMS.general,
     ...(isAuthenticated && role ? NAV_ITEMS[role] : []),
@@ -91,7 +90,9 @@ export function Navbar({ isAuthenticated, role, logoutAction }: NavbarProps) {
                       className="flex items-center gap-2 px-3 py-2 rounded-full text-xs font-medium text-white bg-white/10 hover:bg-white/20 border border-white/20 transition-colors"
                     >
                       <User className="w-4 h-4" />
-                      {role && <span className="capitalize">{role}</span>}
+                      <span className="max-w-[100px] truncate">
+                        {name ?? (role ? role.charAt(0).toUpperCase() + role.slice(1) : "Account")}
+                      </span>
                     </button>
 
                     {userMenuOpen && (

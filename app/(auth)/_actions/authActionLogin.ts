@@ -29,8 +29,7 @@ export async function loginUser(
         const errors: LoginActionState["errors"] = {};
 
         for (const issue of parsed.error.issues) {
-            const key =
-                issue.path[0] as keyof NonNullable<LoginActionState["errors"]>;
+            const key = issue.path[0] as keyof NonNullable<LoginActionState["errors"]>;
 
             if (key && !errors[key]) {
                 errors[key] = issue.message;
@@ -38,13 +37,14 @@ export async function loginUser(
         }
 
         return {
-            success: false,
-            errors,
+            success: false, errors,
         };
     }
 
-    try {
+    let accessToken: string | undefined;
+    let refreshToken: string | undefined;
 
+    try {
         const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
             method: "POST",
             headers: {
@@ -63,8 +63,8 @@ export async function loginUser(
             };
         }
 
-        const accessToken = result?.data?.accessToken;
-        const refreshToken = result?.data?.refreshToken;
+        accessToken = result?.data?.accessToken;
+        refreshToken = result?.data?.refreshToken;
 
         if (!accessToken || !refreshToken) {
             return {
@@ -72,26 +72,6 @@ export async function loginUser(
                 message: "Authentication tokens not received.",
             };
         }
-
-        const cookieStore = await cookies();
-
-        cookieStore.set("accessToken", accessToken, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: "lax",
-            path: "/",
-            maxAge: 60 * 60 * 24,
-        });
-
-        cookieStore.set("refreshToken", refreshToken, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: "lax",
-            path: "/",
-            maxAge: 60 * 60 * 24 * 7,
-        });
-
-        redirect("/dashboard");
     } catch (error) {
         console.error(error);
 
@@ -100,6 +80,26 @@ export async function loginUser(
             message: "Unable to connect to server.",
         };
     }
+
+    const cookieStore = await cookies();
+
+    cookieStore.set("accessToken", accessToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        path: "/",
+        maxAge: 60 * 60 * 24,
+    });
+
+    cookieStore.set("refreshToken", refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        path: "/",
+        maxAge: 60 * 60 * 24 * 7,
+    });
+
+    redirect("/home");
 }
 
 export async function logoutUser() {

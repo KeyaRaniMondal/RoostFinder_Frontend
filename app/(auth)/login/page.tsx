@@ -1,4 +1,3 @@
-import { RegisterForm } from "@/app/(auth)/_components/registerForm";
 import { LoginForm } from "../_components/loginForm";
 
 export default function RegisterPage() {
@@ -16,3 +15,5 @@ export default function RegisterPage() {
         </main>
     );
 }
+
+
