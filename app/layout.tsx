@@ -1,3 +1,4 @@
+
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
@@ -42,15 +43,17 @@ export default function RootLayout({
       )}
     >
       <body className="min-h-full flex flex-col font-mono">
-        <ThemeProvider
+        {/* <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
-        >
-          <Navbar />
+        > */}
+          <Navbar isAuthenticated={false} role={null} logoutAction={function (): Promise<void> {
+            throw new Error("Function not implemented.");
+          } } />
           <main className="flex-1">{children}</main>
-        </ThemeProvider>
+        {/* </ThemeProvider> */}
       </body>
     </html>
   );
