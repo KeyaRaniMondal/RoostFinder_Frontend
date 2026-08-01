@@ -1,0 +1,145 @@
+"use client";
+
+import { useState } from "react";
+import { useProperties } from "@/hooks/usePeoperties";
+import { Property, PropertyAmenity } from "@/types";
+import { FilterSidebar, defaultFilters, PropertyFilterState } from "@/components/properties/filterSidebar";
+import { PropertyGrid, PropertyGridSkeleton } from "@/components/properties/propertyGrid";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Button } from "@/components/ui/button";
+
+const LIMIT = 9;
+
+function filterByAmenities(properties: Property[], amenities: PropertyAmenity[]) {
+  if (!amenities.length) return properties;
+  return properties.filter((p) => amenities.every((a) => (p.amenities ?? []).includes(a)));
+}
+
+export default function PropertiesPage() {
+  const [filters, setFilters] = useState<PropertyFilterState>(defaultFilters);
+  const [page, setPage] = useState(1);
+
+  const { data, isLoading, isError, refetch, isFetching } = useProperties({
+    searchTerm: filters.searchTerm || undefined,
+    minPrice: filters.minPrice || undefined,
+    maxPrice: filters.maxPrice || undefined,
+    propertyType: filters.propertyType || undefined,
+    purpose: filters.purpose || undefined,
+    page,
+    limit: LIMIT,
+  });
+
+  const all = data?.data ?? [];
+  const filtered = filterByAmenities(all, filters.amenities);
+  const totalPages = Math.max(1, Math.ceil((data?.meta.total ?? 0) / LIMIT));
+
+  const handleFilterChange = (next: PropertyFilterState) => {
+    setFilters(next);
+    setPage(1);
+  };
+
+  return (
+    <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+      <div className="mb-8">
+        <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl">Browse properties</h1>
+        <p className="mt-1 text-sm text-slate-500">Search, filter and find your next place.</p>
+      </div>
+
+      <div className="grid gap-8 lg:grid-cols-[300px_1fr]">
+        <FilterSidebar
+          filters={filters}
+          onChange={handleFilterChange}
+          totalCount={isLoading ? undefined : data?.meta.total}
+        />
+
+        <div>
+          {isLoading || (isFetching && !data) ? (
+            <PropertyGridSkeleton count={LIMIT} />
+          ) : isError ? (
+            <EmptyState
+              title="Failed to load properties"
+              description="We couldn't reach the server. Check that the API is running and try again."
+              action={<Button onClick={() => refetch()}>Retry</Button>}
+            />
+          ) : filtered.length ? (
+            <>
+              <PropertyGrid properties={filtered} />
+              {filters.amenities.length > 0 && data && filtered.length < data.data.length && (
+                <p className="mt-4 text-center text-xs text-slate-400">
+                  Amenity filter applied — showing {filtered.length} of {data.meta.total} total
+                </p>
+              )}
+              {totalPages > 1 && (
+                <Pagination className="mt-10">
+                  <PaginationContent>
+                    <PaginationItem>
+                      <PaginationPrevious
+                        href="#"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          if (page > 1) setPage(page - 1);
+                        }}
+                        className={page <= 1 ? "pointer-events-none opacity-50" : ""}
+                      />
+                    </PaginationItem>
+                    {Array.from({ length: totalPages }).map((_, i) => {
+                      const n = i + 1;
+                      return (
+                        <PaginationItem key={n}>
+                          <PaginationLink
+                            href="#"
+                            isActive={n === page}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              setPage(n);
+                            }}
+                          >
+                            {n}
+                          </PaginationLink>
+                        </PaginationItem>
+                      );
+                    })}
+                    <PaginationItem>
+                      <PaginationNext
+                        href="#"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          if (page < totalPages) setPage(page + 1);
+                        }}
+                        className={page >= totalPages ? "pointer-events-none opacity-50" : ""}
+                      />
+                    </PaginationItem>
+                  </PaginationContent>
+                </Pagination>
+              )}
+            </>
+          ) : (
+            <EmptyState
+              title="No properties found"
+              description="Try adjusting your search or filters to find more results."
+              action={
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setFilters(defaultFilters);
+                    setPage(1);
+                  }}
+                >
+                  Clear all filters
+                </Button>
+              }
+            />
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}

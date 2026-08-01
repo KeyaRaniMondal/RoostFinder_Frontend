@@ -1,4 +1,4 @@
-import { AuthTokens, JwtPayload } from "@/app/types";
+import { AuthTokens, JwtPayload } from "@/types";
 
 export const AUTH_COOKIE = "rf_token";
 export const ACCESS_TOKEN_KEY = "rf_access_token";

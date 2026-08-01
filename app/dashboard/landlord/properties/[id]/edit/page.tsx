@@ -6,7 +6,6 @@ import { PropertyForm } from "@/components/forms/propertyForm";
 import { propertyToFormValues, PropertyFormValues } from "@/schemas/property"
 import { useProperty, useUpdateProperty } from "@/hooks/usePeoperties";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { FullPageSpinner } from "@/components/ui/spinner";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default function EditPropertyPage() {

@@ -36,9 +36,10 @@ export default function NewPropertyPage() {
     const createProperty = useCreateProperty();
 
     const onSubmit = async (values: PropertyFormValues) => {
-        const { status: _status, ...payload } = values;
+        const payload = { ...values } as Record<string, unknown>;
+        delete payload.status;
         try {
-            await createProperty.mutateAsync(payload as Record<string, unknown>);
+            await createProperty.mutateAsync(payload);
             toast.success("Property created", { description: "Your listing is now live." });
             router.push("/dashboard/landlord");
         } catch (error) {

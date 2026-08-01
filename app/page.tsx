@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Search, ChevronRight } from 'lucide-react';
 
-export default function homePage() {
+export default function HomePage() {
   const [selectedCategory, setSelectedCategory] = useState('home');
   const [selectedPropertyType, setSelectedPropertyType] = useState('house');
 
@@ -68,7 +68,7 @@ export default function homePage() {
                 <input
                   type="text"
                   placeholder="Enter Type"
-                  className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
+                  className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
                 />
               </div>
 
@@ -78,7 +78,7 @@ export default function homePage() {
                 <input
                   type="text"
                   placeholder="Price"
-                  className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
+                  className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
                 />
               </div>
 
@@ -87,7 +87,7 @@ export default function homePage() {
                 <input
                   type="text"
                   placeholder="LONDON"
-                  className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
+                  className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
                 />
               </div>
 
@@ -97,7 +97,7 @@ export default function homePage() {
                 <input
                   type="text"
                   placeholder="2 Room"
-                  className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
+                  className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
                 />
               </div>
             </div>
@@ -140,7 +140,7 @@ export default function homePage() {
             <p className="text-lg text-slate-600 leading-relaxed mb-6">
               We connect buyers and sellers through a trusted platform with verified properties, transparent deals, and expert guidance—supporting you at every step.
             </p>
-            <Button className="bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-full font-semibold flex items-center gap-2">
+            <Button className="bg-brand-600 hover:bg-brand-700 text-white px-8 py-3 rounded-full font-semibold flex items-center gap-2">
               Learn More
               <ChevronRight className="w-4 h-4" />
             </Button>

@@ -1,5 +1,5 @@
 import { cookies } from "next/headers";
-import type { Role } from "@/lib/validations/loginAuth"; 
+import type { Role } from "@/types";
 
 const ACCESS_COOKIE_NAME = "accessToken";
 const REFRESH_COOKIE_NAME = "refreshToken";

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, FieldPath, Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Plus, Trash2 } from "lucide-react";
 import { propertySchema, PropertyFormValues } from "@/schemas/property";
@@ -35,7 +35,7 @@ export function PropertyForm({
         setValue,
         formState: { errors, isSubmitting },
     } = useForm<PropertyFormValues>({
-        resolver: zodResolver(propertySchema),
+        resolver: zodResolver(propertySchema) as Resolver<PropertyFormValues>,
         defaultValues,
     });
 
@@ -60,13 +60,13 @@ export function PropertyForm({
         await onSubmit(values);
     });
 
-    const input = (label: string, name: keyof PropertyFormValues, fieldError?: string) => (
+    const input = (label: string, name: FieldPath<PropertyFormValues>, fieldError?: string) => (
         <div>
             <Label htmlFor={String(name)}>{label}</Label>
             <Input
                 id={String(name)}
                 aria-invalid={!!fieldError}
-                {...(register as any)(name)}
+                {...register(name)}
             />
             <FormError message={fieldError} />
         </div>

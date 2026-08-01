@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -36,13 +36,17 @@ export default function LandlordProfilePage() {
     const { data: landlord, isLoading } = useMyLandlordProfile(user?.id);
     const createProfile = useCreateLandlordProfile();
     const updateProfile = useUpdateLandlordProfile();
-    const [isNew, setIsNew] = useState(false);
     const [serverError, setServerError] = useState<string | null>(null);
+
+    const isNew = !isLoading && !landlord;
+    const landlordFormValues = useMemo(
+        () => (landlord ? toFormValues(landlord) : undefined),
+        [landlord]
+    );
 
     const {
         register,
         handleSubmit,
-        reset,
         formState: { errors },
     } = useForm<LandlordProfileFormValues>({
         resolver: zodResolver(landlordProfileSchema),
@@ -56,17 +60,8 @@ export default function LandlordProfilePage() {
             profilePhoto: "",
             bio: "",
         },
+        values: landlordFormValues,
     });
-
-    useEffect(() => {
-        if (isLoading) return;
-        if (landlord) {
-            setIsNew(false);
-            reset(toFormValues(landlord));
-        } else {
-            setIsNew(true);
-        }
-    }, [landlord, isLoading, reset]);
 
     const onSubmit = handleSubmit(async (values) => {
         setServerError(null);
