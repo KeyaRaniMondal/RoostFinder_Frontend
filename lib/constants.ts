@@ -1,4 +1,4 @@
-import { PropertyAmenity, PropertyPurpose, PropertyType} from "@/app/types";
+import { PropertyAmenity, PropertyPurpose, PropertyType, Role} from "@/app/types";
 
 export const API_BASE_URL = process.env.API_BASE_URL || "http://localhost:5000";
 
@@ -29,5 +29,10 @@ export const AMENITIES: Record<PropertyAmenity, string> = {
   PREPAID_GAS: "Prepaid Gas",
 };
 
+export const DASHBOARD_ROLE_BASE_URL: Record<Role, string> = {
+  Tenant: "/dashboard/tenant",
+  Landlord: "/dashboard/landlord",
+  Admin: "/dashboard/admin",
+};
 
 export const FALLBACK_IMAGE = "/placeholder.svg";
