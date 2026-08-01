@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Building2, ChevronDown, Home, LogOut, Menu, X } from "lucide-react";
-import { useAuth } from "@/hooks/use-auth";
+import { useAuth } from "@/hooks/useAuth";
 import { cn } from "@/lib/utils";
 import { DASHBOARD_ROLE_BASE_URL, ROLES } from "@/lib/constants";
 import { Button } from "@/components/ui/button";

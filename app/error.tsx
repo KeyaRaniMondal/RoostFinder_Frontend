@@ -1,0 +1,29 @@
+"use client";
+
+import { AlertTriangle, RotateCcw } from "lucide-react";
+
+export default function Error({
+  error,
+  reset,
+}: {
+  error: Error & { digest?: string };
+  reset: () => void;
+}) {
+  return (
+    <div className="mx-auto flex min-h-[50vh] max-w-lg flex-col items-center justify-center px-4 text-center">
+      <span className="flex h-14 w-14 items-center justify-center rounded-full bg-red-100 text-red-600">
+        <AlertTriangle className="h-7 w-7" />
+      </span>
+      <h1 className="mt-4 text-xl font-bold text-slate-900">Something went wrong</h1>
+      <p className="mt-2 text-sm text-slate-500">
+        {error.message || "An unexpected error occurred. Please try again."}
+      </p>
+      <button
+        onClick={reset}
+        className="mt-6 inline-flex items-center gap-2 rounded-lg bg-brand-600 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-brand-700"
+      >
+        <RotateCcw className="h-4 w-4" /> Try again
+      </button>
+    </div>
+  );
+}
