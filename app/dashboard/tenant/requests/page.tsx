@@ -1,7 +1,7 @@
 "use client";
 
-import { useAuth } from "@/hooks/useAuth";
-import { useMyRentalRequests } from "@/hooks/useRentals";
+import { useAuth } from "@/hooks/use-auth";
+import { useMyRentalRequests } from "@/hooks/use-rentals";
 import { TenantRequestsList } from "@/components/dashboard/tenant-requests";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Inbox } from "lucide-react";

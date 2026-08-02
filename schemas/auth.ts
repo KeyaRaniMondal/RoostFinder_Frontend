@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { Role } from "@/app/types";
+import { Role } from "@/types";
 
 export const registerSchema = z.object({
   name: z

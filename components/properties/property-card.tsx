@@ -1,9 +1,12 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { BedDouble, Bath, MapPin, Ruler, Building2 } from "lucide-react";
 import { Property } from "@/types";
 import { FALLBACK_IMAGE, PROPERTY_PURPOSES, PROPERTY_TYPES } from "@/lib/constants";
 import { absoluteImageUrl, formatPrice } from "@/lib/utils";
+import { Badge } from "@/components/ui/badge";
 
 export function PropertyCard({ property }: { property: Property }) {
   const image = property.images?.[0] ? absoluteImageUrl(property.images[0]) : FALLBACK_IMAGE;
@@ -11,7 +14,7 @@ export function PropertyCard({ property }: { property: Property }) {
   return (
     <Link
       href={`/properties/${property.id}`}
-      className="group flex flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-lg"
+      className="group flex flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-card transition-all hover:-translate-y-0.5 hover:shadow-lg"
     >
       <div className="relative aspect-[4/3] overflow-hidden bg-slate-100">
         <Image
@@ -25,12 +28,16 @@ export function PropertyCard({ property }: { property: Property }) {
           }}
         />
         <div className="absolute left-3 top-3 flex gap-2">
-          <span className="rounded-full bg-white/90 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-brand-800 shadow-sm">
+          <Badge className="bg-white/90 backdrop-blur">{PROPERTY_TYPES[property.propertyType]}</Badge>
+          <Badge
+            className={
+              property.purpose === "RENT"
+                ? "bg-emerald-600 text-white"
+                : "bg-brand-600 text-white"
+            }
+          >
             {PROPERTY_PURPOSES[property.purpose]}
-          </span>
-          <span className="rounded-full bg-brand-600/90 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-white shadow-sm">
-            {PROPERTY_TYPES[property.propertyType]}
-          </span>
+          </Badge>
         </div>
         {property.status !== "ACTIVE" && (
           <div className="absolute inset-0 flex items-center justify-center bg-slate-900/50">
@@ -104,7 +111,7 @@ export function PropertyCard({ property }: { property: Property }) {
 
 export function PropertyCardSkeleton() {
   return (
-    <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+    <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-card">
       <div className="aspect-[4/3] animate-pulse bg-slate-200" />
       <div className="space-y-3 p-4">
         <div className="h-4 w-3/4 animate-pulse rounded bg-slate-200" />

@@ -1,5 +1,12 @@
 import {
-  ActiveStatus, PaymentStatus, PropertyAmenity, PropertyPurpose, PropertyStatus, PropertyType, RentalStatus, Role,
+  ActiveStatus,
+  PaymentStatus,
+  PropertyAmenity,
+  PropertyPurpose,
+  PropertyStatus,
+  PropertyType,
+  RentalStatus,
+  Role,
 } from "@/types";
 
 export const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5000";

@@ -1,24 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { useProperties } from "@/hooks/usePeoperties";
-import { Property, PropertyAmenity } from "@/types";
-import { FilterSidebar, defaultFilters, PropertyFilterState } from "@/components/properties/filterSidebar";
-import { PropertyGrid, PropertyGridSkeleton } from "@/components/properties/propertyGrid";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
+import { useProperties } from "@/hooks/use-properties";
+import { PropertyAmenity } from "@/types";
+import { FilterSidebar, defaultFilters, PropertyFilterState } from "@/components/properties/filter-sidebar";
+import { PropertyGrid, PropertyGridSkeleton } from "@/components/properties/property-grid";
+import { Pagination } from "@/components/ui/pagination";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Button } from "@/components/ui/button";
 
-const LIMIT = 9;
-
-function filterByAmenities(properties: Property[], amenities: PropertyAmenity[]) {
+function filterByAmenities(properties: any[], amenities: PropertyAmenity[]) {
   if (!amenities.length) return properties;
   return properties.filter((p) => amenities.every((a) => (p.amenities ?? []).includes(a)));
 }
@@ -34,35 +25,38 @@ export default function PropertiesPage() {
     propertyType: filters.propertyType || undefined,
     purpose: filters.purpose || undefined,
     page,
-    limit: LIMIT,
+    limit: 9,
   });
 
   const all = data?.data ?? [];
   const filtered = filterByAmenities(all, filters.amenities);
-  const totalPages = Math.max(1, Math.ceil((data?.meta.total ?? 0) / LIMIT));
-
-  const handleFilterChange = (next: PropertyFilterState) => {
-    setFilters(next);
-    setPage(1);
-  };
+const totalPages = Math.max(
+  1,
+  Math.ceil((data?.meta?.total ?? 0) / 9)
+);
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl">Browse properties</h1>
-        <p className="mt-1 text-sm text-slate-500">Search, filter and find your next place.</p>
+        <p className="mt-1 text-sm text-slate-500">
+          Search, filter and find your next place.
+        </p>
       </div>
 
       <div className="grid gap-8 lg:grid-cols-[300px_1fr]">
         <FilterSidebar
           filters={filters}
-          onChange={handleFilterChange}
+          onChange={(next) => {
+            setFilters(next);
+            setPage(1);
+          }}
           totalCount={isLoading ? undefined : data?.meta.total}
         />
 
         <div>
           {isLoading || (isFetching && !data) ? (
-            <PropertyGridSkeleton count={LIMIT} />
+            <PropertyGridSkeleton count={9} />
           ) : isError ? (
             <EmptyState
               title="Failed to load properties"
@@ -77,49 +71,7 @@ export default function PropertiesPage() {
                   Amenity filter applied — showing {filtered.length} of {data.meta.total} total
                 </p>
               )}
-              {totalPages > 1 && (
-                <Pagination className="mt-10">
-                  <PaginationContent>
-                    <PaginationItem>
-                      <PaginationPrevious
-                        href="#"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          if (page > 1) setPage(page - 1);
-                        }}
-                        className={page <= 1 ? "pointer-events-none opacity-50" : ""}
-                      />
-                    </PaginationItem>
-                    {Array.from({ length: totalPages }).map((_, i) => {
-                      const n = i + 1;
-                      return (
-                        <PaginationItem key={n}>
-                          <PaginationLink
-                            href="#"
-                            isActive={n === page}
-                            onClick={(e) => {
-                              e.preventDefault();
-                              setPage(n);
-                            }}
-                          >
-                            {n}
-                          </PaginationLink>
-                        </PaginationItem>
-                      );
-                    })}
-                    <PaginationItem>
-                      <PaginationNext
-                        href="#"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          if (page < totalPages) setPage(page + 1);
-                        }}
-                        className={page >= totalPages ? "pointer-events-none opacity-50" : ""}
-                      />
-                    </PaginationItem>
-                  </PaginationContent>
-                </Pagination>
-              )}
+              {data && <Pagination meta={{ page, limit: 9, total: totalPages }} onPageChange={setPage} />}
             </>
           ) : (
             <EmptyState

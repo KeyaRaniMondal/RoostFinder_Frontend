@@ -1,12 +1,23 @@
 "use client";
 
 import {
-  createContext, useCallback, useContext, useEffect, useMemo, useState, ReactNode,
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+  ReactNode,
 } from "react";
 import { useRouter } from "next/navigation";
 import { api } from "@/lib/api";
 import {
-  clearAuth, getAccessToken, getStoredUser, parseAuthToken, persistAuth, writeAuthCookie,
+  clearAuth,
+  getAccessToken,
+  getStoredUser,
+  parseAuthToken,
+  persistAuth,
+  writeAuthCookie,
 } from "@/lib/token";
 import { AuthTokens, JwtPayload, User } from "@/types";
 
@@ -34,11 +45,29 @@ const AuthContext = createContext<AuthContextValue | null>(null);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const router = useRouter();
   const [user, setUser] = useState<JwtPayload | null>(null);
-  const [token, setToken] = useState<string | null>(null);
   const [me, setMeState] = useState<User | null>(null);
+  const [token, setToken] = useState<string | null>(null);
   const [status, setStatus] = useState<AuthContextValue["status"]>("loading");
 
-  const refreshMe = useCallback(async () => {
+  useEffect(() => {
+    const stored = getAccessToken();
+    const parsed = stored ? parseAuthToken(stored) : null;
+    const cached = getStoredUser();
+
+    if (stored && (parsed || cached)) {
+      setToken(stored);
+      setUser(parsed ?? cached);
+      setStatus("authenticated");
+      writeAuthCookie(stored);
+      refreshMe(stored);
+    } else {
+      clearAuth();
+      setStatus("unauthenticated");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const refreshMe = useCallback(async (accessToken?: string | null) => {
     try {
       const { profile } = await api.get<{ profile: User }>("/api/auth/me");
       setMeState(profile);
@@ -55,33 +84,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  useEffect(() => {
-    const stored = getAccessToken();
-    const parsed = stored ? parseAuthToken(stored) : null;
-    const cached = getStoredUser();
-    const hasSession = Boolean(stored && (parsed || cached));
-
-    if (hasSession) {
-      writeAuthCookie(stored);
-    } else {
-      clearAuth();
-    }
-
-    const timer = setTimeout(() => {
-      if (hasSession) {
-        setToken(stored);
-        setUser(parsed ?? cached);
-        setStatus("authenticated");
-        refreshMe();
-      } else {
-        setStatus("unauthenticated");
-      }
-    }, 0);
-
-    return () => clearTimeout(timer);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   const applyAuth = useCallback((tokens: AuthTokens) => {
     const payload = parseAuthToken(tokens.accessToken);
     if (!payload) throw new Error("Invalid authentication response");
@@ -89,7 +91,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setToken(tokens.accessToken);
     setUser(payload);
     setStatus("authenticated");
-    refreshMe();
+    refreshMe(tokens.accessToken);
   }, [refreshMe]);
 
   const login = useCallback(

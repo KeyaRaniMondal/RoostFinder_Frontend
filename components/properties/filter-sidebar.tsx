@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { AmenitySelector } from "@/components/properties/aminitySelector";
+import { AmenitySelector } from "@/components/properties/amenity-selector";
 import { PROPERTY_PURPOSES, PROPERTY_TYPES } from "@/lib/constants";
 import { PropertyAmenity } from "@/types";
 
@@ -38,12 +38,10 @@ export function FilterSidebar({
   totalCount?: number;
 }) {
   const [search, setSearch] = useState(filters.searchTerm);
-  const [prevSearchTerm, setPrevSearchTerm] = useState(filters.searchTerm);
 
-  if (filters.searchTerm !== prevSearchTerm) {
-    setPrevSearchTerm(filters.searchTerm);
+  useEffect(() => {
     setSearch(filters.searchTerm);
-  }
+  }, [filters.searchTerm]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -56,7 +54,7 @@ export function FilterSidebar({
   const update = (patch: Partial<PropertyFilterState>) => onChange({ ...filters, ...patch });
 
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm lg:sticky lg:top-20">
+    <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-card lg:sticky lg:top-20">
       <div className="flex items-center justify-between">
         <h2 className="flex items-center gap-2 text-base font-semibold text-slate-900">
           <SlidersHorizontal className="h-4 w-4 text-brand-600" /> Filters

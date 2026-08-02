@@ -6,15 +6,15 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { Home, Building2, ShieldCheck, Check, Loader2 } from "lucide-react";
-import { useAuth } from "@/hooks/useAuth";
+import { Home, Building2, ShieldCheck, Check } from "lucide-react";
+import { useAuth } from "@/hooks/use-auth";
 import { registerSchema, RegisterFormValues } from "@/schemas/auth";
 import { DASHBOARD_ROLE_BASE_URL, ROLES } from "@/lib/constants";
 import { Role } from "@/types";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { FormError } from "@/components/ui/formError";
+import { FormError } from "@/components/ui/form-error";
 import { cn } from "@/lib/utils";
 
 const roleIcons: Record<Role, typeof Home> = {
@@ -172,13 +172,7 @@ function RegisterForm() {
           <FormError message={errors.profilePhoto?.message} />
         </div>
 
-        <Button
-          type="submit"
-          className="w-full"
-          size="lg"
-          disabled={submitting}
-        >
-          {submitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+        <Button type="submit" className="w-full" size="lg" loading={submitting}>
           {submitting ? "Creating account..." : "Create account"}
         </Button>
       </form>

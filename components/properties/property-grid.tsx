@@ -1,5 +1,5 @@
 import { Property } from "@/types";
-import { PropertyCard, PropertyCardSkeleton } from "@/components/properties/propertyCard";
+import { PropertyCard, PropertyCardSkeleton } from "@/components/properties/property-card";
 
 export function PropertyGrid({ properties }: { properties: Property[] }) {
   return (

@@ -1,152 +1,142 @@
-'use client';
+import Link from "next/link";
+import Image from "next/image";
+import { ArrowRight, Building2, KeyRound, ShieldCheck, Search } from "lucide-react";
+import { serverFetch } from "@/lib/api";
+import { Paginated, Property } from "@/types";
+import { PropertyGrid } from "@/components/properties/property-grid";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Search, ChevronRight } from 'lucide-react';
+const heroImage =
+  "https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=1800&q=80";
 
-export default function HomePage() {
-  const [selectedCategory, setSelectedCategory] = useState('home');
-  const [selectedPropertyType, setSelectedPropertyType] = useState('house');
+const perks = [
+  {
+    icon: Building2,
+    title: "Verified listings",
+    text: "Every property is checked by our team before it goes live.",
+  },
+  {
+    icon: KeyRound,
+    title: "Request & pay online",
+    text: "Request a rental and pay securely through Stripe checkout.",
+  },
+  {
+    icon: ShieldCheck,
+    title: "Trusted tenants",
+    text: "Reviews and verified profiles keep the community safe.",
+  },
+];
 
-  const categories = [
-    { id: 'home', label: 'Home' },
-    { id: 'apartments', label: 'Apartments' },
-    { id: 'residential', label: 'Residential' },
-  ];
+export const dynamic = "force-dynamic";
 
-  const propertyTypes = [
-    { id: 'city', label: 'City' },
-    { id: 'house', label: 'House' },
-    { id: 'apartments', label: 'Apartments' },
-    { id: 'residential', label: 'Residential' },
-  ];
+async function getFeaturedProperties() {
+  try {
+    const data = await serverFetch<Paginated<Property>>("/api/properties?limit=6&purpose=RENT");
+    return data.data ?? [];
+  } catch {
+    return [] as Property[];
+  }
+}
+
+export default async function HomePage() {
+  const featured = await getFeaturedProperties();
 
   return (
-    <main className="min-h-screen -mt-20">
+    <div>
+      <section className="relative overflow-hidden bg-gradient-to-br from-brand-950 via-brand-900 to-brand-700 text-white">
+        <Image
+          src={heroImage}
+          alt="A beautiful property"
+          fill
+          priority
+          className="object-cover opacity-25"
+        />
+        <div className="relative mx-auto flex max-w-7xl flex-col items-center px-4 py-24 text-center sm:px-6 sm:py-32 lg:px-8">
+          <Badge className="mb-5 bg-white/15 text-white backdrop-blur">
+            Find your next home
+          </Badge>
+          <h1 className="max-w-3xl text-4xl font-bold leading-tight tracking-tight sm:text-5xl lg:text-6xl">
+            Discover a place you&apos;ll love to call home
+          </h1>
+          <p className="mt-5 max-w-2xl text-base text-brand-100/90 sm:text-lg">
+            Browse apartments, houses and villas, request to rent in a few clicks, and pay
+            securely online.
+          </p>
+          <div className="mt-9 w-full max-w-2xl">
+            <form action="/properties" className="flex flex-col gap-2 rounded-2xl bg-white p-2 shadow-2xl sm:flex-row sm:items-center">
+              <div className="flex flex-1 items-center gap-2 px-3">
+                <Search className="h-5 w-5 shrink-0 text-slate-400" />
+                <input
+                  name="searchTerm"
+                  placeholder="Search by title, area or district..."
+                  className="h-11 w-full bg-transparent text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none"
+                />
+              </div>
+              <Button type="submit" size="lg" className="sm:w-auto">
+                Search properties <ArrowRight className="h-4 w-4" />
+              </Button>
+            </form>
+          </div>
+        </div>
+      </section>
 
-      <section
-        className="min-h-screen flex flex-col justify-between pt-20 pb-8  px-4 md:px-6 lg:px-8 relative"
-        style={{
-          backgroundImage: "url('/assets/homepage.jpg')",
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-        }}
-      >
+      <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-2xl font-bold text-slate-900">Featured rentals</h2>
+            <p className="mt-1 text-sm text-slate-500">
+              Popular properties to rent right now
+            </p>
+          </div>
+          <Link
+            href="/properties"
+            className="inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium text-brand-600 transition-colors hover:bg-slate-100"
+          >
+            View all <ArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
+        <div className="mt-6">
+          {featured.length ? (
+            <PropertyGrid properties={featured} />
+          ) : (
+            <div className="rounded-xl border border-dashed border-slate-300 bg-white p-10 text-center text-sm text-slate-500">
+              No featured properties yet. <Link href="/auth/register?role=Landlord" className="font-medium text-brand-600">Be the first to list one →</Link>
+            </div>
+          )}
+        </div>
+      </section>
 
-        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/50 pointer-events-none"></div>
-        <div className="relative z-10 max-w-6xl mx-auto w-full mt-20">
-          <div className="flex flex-wrap gap-3 mb-8">
-            {categories.map((cat) => (
-              <button
-                key={cat.id}
-                onClick={() => setSelectedCategory(cat.id)}
-                className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${selectedCategory === cat.id
-                    ? 'bg-white text-slate-900'
-                    : 'bg-white/70 text-slate-800 hover:bg-white'
-                  }`}
-              >
-                {cat.label}
-              </button>
+      <section className="bg-white py-16">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid gap-6 sm:grid-cols-3">
+            {perks.map((perk) => (
+              <div key={perk.title} className="rounded-2xl border border-slate-200 p-6">
+                <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-50 text-brand-600">
+                  <perk.icon className="h-6 w-6" />
+                </span>
+                <h3 className="mt-4 text-base font-semibold text-slate-900">{perk.title}</h3>
+                <p className="mt-1.5 text-sm text-slate-500">{perk.text}</p>
+              </div>
             ))}
           </div>
+        </div>
+      </section>
 
-          <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight text-balance max-w-2xl">
-            Your Trusted Real Estate Partner
-          </h1>
-
-          <p className="text-lg text-white/90 mb-12 max-w-xl leading-relaxed">
-            We connect buyers and sellers through a trusted platform with verified properties, transparent deals, and expert guidance—supporting you at every step.
+      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+        <div className="rounded-3xl bg-gradient-to-br from-slate-900 to-slate-700 px-6 py-12 text-center text-white sm:px-12">
+          <h2 className="text-2xl font-bold sm:text-3xl">Own a property? List it today.</h2>
+          <p className="mx-auto mt-3 max-w-xl text-sm text-slate-300 sm:text-base">
+            Create your landlord profile, add your listings, and start receiving rental
+            requests — all free.
           </p>
-
-          {/* Search Card */}
-          <div className="bg-white rounded-2xl p-8 shadow-2xl w-full max-w-4xl">
-            {/* Search Inputs */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-              {/* Looking For */}
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-3">Looking for</label>
-                <input
-                  type="text"
-                  placeholder="Enter Type"
-                  className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
-                />
-              </div>
-
-              {/* Price */}
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-3">Enter Price</label>
-                <input
-                  type="text"
-                  placeholder="Price"
-                  className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-3">Location</label>
-                <input
-                  type="text"
-                  placeholder="LONDON"
-                  className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
-                />
-              </div>
-
-              {/* Number of Rooms */}
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-3">Number Of Room</label>
-                <input
-                  type="text"
-                  placeholder="2 Room"
-                  className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
-                />
-              </div>
-            </div>
-
-            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-              <div className="flex flex-wrap items-center gap-3">
-                <span className="text-xs font-semibold text-slate-600">Filter</span>
-                {propertyTypes.map((type) => (
-                  <button
-                    key={type.id}
-                    onClick={() => setSelectedPropertyType(type.id)}
-                    className={`px-4 py-2 rounded-full text-xs font-medium transition-all border ${selectedPropertyType === type.id
-                        ? 'bg-slate-900 text-white border-slate-900'
-                        : 'bg-white text-slate-700 border-slate-200 hover:border-slate-300'
-                      }`}
-                  >
-                    {type.label}
-                  </button>
-                ))}
-              </div>
-
-              <button className="flex-shrink-0 w-12 h-12 bg-slate-900 hover:bg-slate-800 text-white rounded-full flex items-center justify-center transition-all shadow-lg">
-                <Search className="w-5 h-5" />
-              </button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="bg-white px-4 md:px-6 lg:px-8 py-16 md:py-24">
-        <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
-          {/* Left Side */}
-          <div>
-            <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6 leading-tight">
-              Your Primary home might begin to feel left out
-            </h2>
-          </div>
-
-          <div>
-            <p className="text-lg text-slate-600 leading-relaxed mb-6">
-              We connect buyers and sellers through a trusted platform with verified properties, transparent deals, and expert guidance—supporting you at every step.
-            </p>
-            <Button className="bg-brand-600 hover:bg-brand-700 text-white px-8 py-3 rounded-full font-semibold flex items-center gap-2">
-              Learn More
-              <ChevronRight className="w-4 h-4" />
+          <Link href="/auth/register?role=Landlord">
+            <Button size="lg" className="mt-7 bg-brand-500 text-white hover:bg-brand-600">
+              Become a landlord
             </Button>
-          </div>
+          </Link>
         </div>
       </section>
-    </main>
+    </div>
   );
 }
