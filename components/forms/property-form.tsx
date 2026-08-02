@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Plus, Trash2 } from "lucide-react";
 import { propertySchema, PropertyFormValues } from "@/schemas/property";
@@ -35,7 +35,7 @@ export function PropertyForm({
     setValue,
     formState: { errors, isSubmitting },
   } = useForm<PropertyFormValues>({
-    resolver: zodResolver(propertySchema),
+    resolver: zodResolver(propertySchema) as Resolver<PropertyFormValues>,
     defaultValues,
   });
 

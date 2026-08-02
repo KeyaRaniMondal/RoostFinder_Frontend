@@ -12,6 +12,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
           alt="Modern home"
           fill
           priority
+          sizes="(max-width: 1024px) 100vw, 50vw"
           className="object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-brand-950/90 via-brand-900/40 to-transparent" />
