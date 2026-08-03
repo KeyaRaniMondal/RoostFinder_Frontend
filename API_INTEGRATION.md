@@ -5,15 +5,15 @@
 
 ## Conventions
 
-- **Proxy**: the browser never calls the backend directly. `frontend/next.config.ts` rewrites
+- **Proxy**: the browser never calls the backend directly. `next.config.ts` rewrites
   every `/api/:path*` request to `${NEXT_PUBLIC_BACKEND_URL}/api/:path*` (no CORS). Server
   components fetch the backend directly via `serverFetch`.
-- **Auth**: access token is sent as `Authorization: Bearer <token>` by `frontend/src/lib/api.ts`
+- **Auth**: access token is sent as `Authorization: Bearer <token>` by `lib/api.ts`
   (`api.get/post/put/patch/delete`). Backend `auth()` middleware also accepts the `accessToken`
   httpOnly cookie.
 - **Envelope**: all responses are `{ success, statusCode, message, data, meta? }`. The frontend
   helpers (`api.ts` / `serverFetch`) unwrap `.data` (and pair `data` + `meta` into `Paginated<T>`).
-- **Client data layer**: `frontend/src/hooks/*` wraps every endpoint with TanStack React Query.
+- **Client data layer**: `hooks/*` wraps every endpoint with TanStack React Query.
 
 | Area | Backend endpoint | Auth | Frontend consumer |
 |---|---|---|---|
