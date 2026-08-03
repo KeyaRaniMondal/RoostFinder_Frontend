@@ -1,21 +1,37 @@
 "use client";
 
 import Link from "next/link";
-import { Inbox, Clock, CheckCircle2, XCircle, CreditCard, Wallet } from "lucide-react";
+import { toast } from "sonner";
+import { Inbox, Clock, CheckCircle2, XCircle, CreditCard, Wallet, Trash2, Star } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
-import { useMyRentalRequests, useMyPayments } from "@/hooks/use-rentals";
+import { useMyRentalRequestsWithPayments, useMyPayments } from "@/hooks/use-rentals";
+import { useMyReviews, useDeleteReview } from "@/hooks/use-reviews";
 import { deriveDisplayStatus } from "@/components/dashboard/request-status";
 import { StatCard } from "@/components/dashboard/stat-card";
 import { TenantRequestsList } from "@/components/dashboard/tenant-requests";
 import { PaymentsTable } from "@/components/dashboard/payments-table";
+import { Stars } from "@/components/ui/stars";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { formatPrice } from "@/lib/utils";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Skeleton } from "@/components/ui/skeleton";
+import { formatDate, formatPrice } from "@/lib/utils";
 
 export default function TenantOverviewPage() {
   const { user } = useAuth();
-  const { data: requests, isLoading: requestsLoading } = useMyRentalRequests(user?.id);
+  const { data: requests, isLoading: requestsLoading } = useMyRentalRequestsWithPayments(user?.id);
   const { data: payments, isLoading: paymentsLoading } = useMyPayments(user?.id);
+  const { data: reviews, isLoading: reviewsLoading } = useMyReviews();
+  const deleteReview = useDeleteReview();
+
+  const handleDeleteReview = async (id: string) => {
+    try {
+      await deleteReview.mutateAsync(id);
+      toast.success("Review deleted");
+    } catch (error) {
+      toast.error("Could not delete review", { description: (error as Error).message });
+    }
+  };
 
   const statuses = (requests ?? []).map(deriveDisplayStatus);
   const pending = statuses.filter((s) => s === "PENDING").length;
@@ -70,6 +86,56 @@ export default function TenantOverviewPage() {
         </CardHeader>
         <CardContent>
           <PaymentsTable payments={payments} isLoading={paymentsLoading} />
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Star className="h-4 w-4 text-amber-500" /> My reviews
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          {reviewsLoading ? (
+            <div className="space-y-3">
+              {[1, 2].map((i) => (
+                <Skeleton key={i} className="h-16 w-full" />
+              ))}
+            </div>
+          ) : reviews?.length ? (
+            <div className="space-y-4">
+              {reviews.map((review) => (
+                <div key={review.id} className="flex items-start gap-3 rounded-xl border border-slate-200 p-4">
+                  <div className="min-w-0 flex-1">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <p className="line-clamp-1 text-sm font-semibold text-slate-900">
+                        {review.property?.title ?? "Property"}
+                      </p>
+                      <Stars value={review.rating} readonly size="sm" />
+                    </div>
+                    {review.comment && (
+                      <p className="mt-1 line-clamp-2 text-sm text-slate-600">{review.comment}</p>
+                    )}
+                    <p className="mt-1 text-xs text-slate-400">{formatDate(review.createdAt)}</p>
+                  </div>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="shrink-0 text-red-600 hover:text-red-700"
+                    onClick={() => handleDeleteReview(review.id)}
+                    disabled={deleteReview.isPending}
+                  >
+                    <Trash2 className="h-3.5 w-3.5" />
+                  </Button>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <EmptyState
+              title="No reviews yet"
+              description="Review your completed rentals to help other tenants."
+            />
+          )}
         </CardContent>
       </Card>
 

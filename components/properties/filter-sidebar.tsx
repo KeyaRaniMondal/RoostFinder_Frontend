@@ -8,7 +8,8 @@ import { Select } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { AmenitySelector } from "@/components/properties/amenity-selector";
 import { PROPERTY_PURPOSES, PROPERTY_TYPES } from "@/lib/constants";
-import { PropertyAmenity } from "@/types";
+import { useCategories } from "@/hooks/use-properties";
+import { PropertyAmenity, PropertyType } from "@/types";
 
 export interface PropertyFilterState {
   searchTerm: string;
@@ -38,6 +39,12 @@ export function FilterSidebar({
   totalCount?: number;
 }) {
   const [search, setSearch] = useState(filters.searchTerm);
+
+  const { data: categories } = useCategories();
+  const propertyTypes: PropertyType[] =
+    categories && categories.length > 0
+      ? (categories as PropertyType[])
+      : (Object.keys(PROPERTY_TYPES) as PropertyType[]);
 
   useEffect(() => {
     setSearch(filters.searchTerm);
@@ -106,9 +113,9 @@ export function FilterSidebar({
             onChange={(e) => update({ propertyType: e.target.value })}
           >
             <option value="">Any type</option>
-            {Object.entries(PROPERTY_TYPES).map(([key, label]) => (
+            {propertyTypes.map((key) => (
               <option key={key} value={key}>
-                {label}
+                {PROPERTY_TYPES[key] ?? key}
               </option>
             ))}
           </Select>

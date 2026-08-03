@@ -1,14 +1,14 @@
 "use client";
 
 import { useAuth } from "@/hooks/use-auth";
-import { useMyRentalRequests } from "@/hooks/use-rentals";
+import { useMyRentalRequestsWithPayments } from "@/hooks/use-rentals";
 import { TenantRequestsList } from "@/components/dashboard/tenant-requests";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Inbox } from "lucide-react";
 
 export default function TenantRequestsPage() {
   const { user } = useAuth();
-  const { data: requests, isLoading } = useMyRentalRequests(user?.id);
+  const { data: requests, isLoading } = useMyRentalRequestsWithPayments(user?.id);
 
   return (
     <div className="space-y-6">

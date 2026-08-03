@@ -19,6 +19,25 @@ export function useCreateReview() {
       api.post<Review>("/api/reviews", payload),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["property-reviews"] });
+      qc.invalidateQueries({ queryKey: ["my-reviews"] });
+    },
+  });
+}
+
+export function useMyReviews() {
+  return useQuery({
+    queryKey: ["my-reviews"],
+    queryFn: () => api.get<Review[]>("/api/reviews/my-reviews"),
+  });
+}
+
+export function useDeleteReview() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => api.delete<Review>(`/api/reviews/${id}`),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["my-reviews"] });
+      qc.invalidateQueries({ queryKey: ["property-reviews"] });
     },
   });
 }

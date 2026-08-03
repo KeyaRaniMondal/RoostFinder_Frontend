@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/lib/api";
 import { Payment, RentalRequest } from "@/types";
@@ -37,6 +38,29 @@ export function useMyPayments(userId?: string) {
     queryFn: () => api.get<Payment[]>("/api/payments"),
     enabled: !!userId,
   });
+}
+
+export function useMyRentalRequestsWithPayments(userId?: string) {
+  const requestsQuery = useMyRentalRequests(userId);
+  const paymentsQuery = useMyPayments(userId);
+
+  const data = useMemo(() => {
+    const requests = requestsQuery.data ?? [];
+    const paymentsByRequest = new Map(
+      (paymentsQuery.data ?? []).map((p) => [p.rentalRequestId, p])
+    );
+    return requests.map((r) =>
+      r.payment
+        ? r
+        : { ...r, payment: paymentsByRequest.get(r.id) ?? r.payment ?? null }
+    );
+  }, [requestsQuery.data, paymentsQuery.data]);
+
+  return {
+    ...requestsQuery,
+    data,
+    isLoading: requestsQuery.isLoading || paymentsQuery.isLoading,
+  };
 }
 
 export function useCreatePaymentSession() {
