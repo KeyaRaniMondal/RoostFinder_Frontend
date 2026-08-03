@@ -122,6 +122,8 @@ roostfinder_frontend/
 │   │    └── api.ts               # Authenticated fetch wrapper (get/post/put/patch/delete)
 │   │──types 
 │       └──index.ts
+
+```
 ---
 
 ## 🔌 API Integration
