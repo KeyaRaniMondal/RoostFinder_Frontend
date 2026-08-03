@@ -128,7 +128,7 @@ roostfinder_frontend/
 
 ## 🔌 API Integration
 
-To view the complete API Integration workflow visit (default: `https://github.com/KeyaRaniMondal/RoostFinder_Frontend/blob/main/API_INTEGRATION.md`)
+To view the complete API Integration workflow visit To view the complete API Integration workflow, visit the [API Integration Workflow](https://github.com/KeyaRaniMondal/RoostFinder_Frontend/blob/main/API_INTEGRATION.md).
 
 ### Key User Flows
 
