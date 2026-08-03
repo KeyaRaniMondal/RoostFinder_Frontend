@@ -4,7 +4,28 @@ A modern rental property marketplace UI built with **Next.js 15**, **React 19**,
 
 
 ---
+**Home Page**
+![Home page](<public/assets/roostfinderfrontend.vercel.app_.png>)
 
+---
+
+# 🔗 Live Links
+
+### 🌐 Live Website
+<p>
+  <a href="https://roostfinderfrontend.vercel.app/">
+    <img src="https://img.shields.io/badge/🌐_Live_Demo-Visit-success?style=for-the-badge">
+  </a>
+</p>
+
+### Github Repository Backend
+<p>
+  <a href="https://github.com/KeyaRaniMondal/RoostFinder">
+    <img src="https://img.shields.io/badge/GitHub-blue?style=for-the-badge&logo=github">
+  </a>
+</p>
+
+---
 ## ✨ Features
 
 - 🔍 **Browse & filter** properties by search term, price range, type, and purpose
@@ -49,7 +70,7 @@ git clone <repo-url>
 cd roostfinder_frontend
 
 # Install dependencies
-npm install
+pnpm install
 ```
 
 ### Environment Variables
@@ -65,7 +86,7 @@ This is used by `next.config.ts` to proxy all `/api/:path*` requests to the back
 ### Development
 
 ```bash
-npm run dev
+pnpm dev
 ```
 
 Visit [http://localhost:3000](http://localhost:3000).
@@ -73,24 +94,15 @@ Visit [http://localhost:3000](http://localhost:3000).
 ### Production Build
 
 ```bash
-npm run build
-npm run start
+pnpm run build
 ```
-
-### Linting
-
-```bash
-npm run lint
-```
-
 ---
 
 ## 📁 Project Structure
 
 ```
-frontend/
+roostfinder_frontend/
 ├── next.config.ts              # Rewrites /api/:path* → backend
-├── src/
 │   ├── app/                    # Next.js App Router pages
 │   │   ├── auth/                # login, register
 │   │   ├── properties/          # listing + detail pages
@@ -106,57 +118,15 @@ frontend/
 │   ├── hooks/                   # React Query hooks (one per resource)
 │   │   ├── use-auth.tsx
 │   │   └── use-properties.ts
-│   └── lib/
-│       └── api.ts               # Authenticated fetch wrapper (get/post/put/patch/delete)
-```
-
+│   │── lib/
+│   │    └── api.ts               # Authenticated fetch wrapper (get/post/put/patch/delete)
+│   │──types 
+│       └──index.ts
 ---
 
 ## 🔌 API Integration
 
-The browser **never calls the backend directly** — every request goes through the Next.js rewrite proxy (`/api/:path*` → `${NEXT_PUBLIC_BACKEND_URL}/api/:path*`), avoiding CORS entirely. Server components use `serverFetch` to call the backend directly during SSR.
-
-**Auth:** the access token is sent as `Authorization: Bearer <token>` by `lib/api.ts`; the backend also accepts an `accessToken` httpOnly cookie.
-
-**Response envelope:** every backend response follows `{ success, statusCode, message, data, meta? }`. The `api.ts` / `serverFetch` helpers unwrap `.data` (and combine `data` + `meta` into a `Paginated<T>` type for list endpoints).
-
-**Data layer:** every endpoint is wrapped by a hook in `src/hooks/*` using TanStack React Query for caching, invalidation, and loading/error state.
-
-### Endpoint Map
-
-| Area | Endpoint | Auth | Frontend Hook / Page |
-|---|---|---|---|
-| **Auth** | `POST /api/auth/register` | — | `use-auth.tsx` → `app/auth/register` |
-| | `POST /api/auth/login` | — | `use-auth.tsx` → `app/auth/login` |
-| | `POST /api/auth/refresh-token` | — | Reserved for API clients (not used by UI) |
-| | `GET /api/auth/me` | any | `use-auth.tsx` (`refreshMe`) on app mount |
-| **Categories** | `GET /api/categories` | — | `useCategories` → `filter-sidebar.tsx` |
-| **Properties** | `GET /api/properties` | — | `useProperties`, `useLandlordProperties` → listings + SSR home |
-| | `GET /api/properties/:id` | — | `useProperty` → property detail, landlord edit |
-| | `POST /api/properties` | Landlord, Admin | `useCreateProperty` → new property form |
-| | `PUT /api/properties/:id` | Landlord, Admin | `useUpdateProperty` → edit property |
-| | `DELETE /api/properties/:id` | Landlord, Admin | `useDeleteProperty` |
-| **Landlord** | `POST /api/landlord` | any | `useCreateLandlordProfile` |
-| | `GET /api/landlord/me` | any | `useMyLandlordProfile` |
-| | `PATCH /api/landlord/me` | any | `useUpdateLandlordProfile` |
-| | `GET /api/landlord/requests` | Landlord, Admin | `useLandlordRequests` |
-| | `PATCH /api/landlord/requests/:id` | Landlord, Admin | `useUpdateRentalRequestStatus` |
-| **Rentals** | `POST /api/rentals` | tenant | `useCreateRentalRequest` → `request-rent-modal.tsx` |
-| | `GET /api/rentals` | any | `useMyRentalRequests` → tenant dashboard |
-| | `GET /api/rentals/:id` | any | `useRentalRequest` → payment page |
-| **Payments** | `POST /api/payments/create` | any | `useCreatePaymentSession` → Stripe Checkout |
-| | `POST /api/payments/confirm` | any | `useConfirmPayment` → `payments/success` |
-| | `GET /api/payments` | any | `useMyPayments` → tenant dashboard |
-| | `GET /api/payments/:id` | any | Not used (detail available on list payloads) |
-| | `POST /api/payments/webhook` | Stripe signature | Backend-only |
-| **Admin** | `GET /api/admin/users` | Admin | `useAdminUsers` |
-| | `PATCH /api/admin/users/:id` | Admin | `useUpdateUserStatus` |
-| | `GET /api/admin/properties` | Admin | `useAdminProperties` |
-| | `GET /api/admin/rentals` | Admin | `useAdminRentals` |
-| **Reviews** | `POST /api/reviews` | Tenant | `useCreateReview` → `review-dialog.tsx` |
-| | `GET /api/reviews/my-reviews` | Tenant | `useMyReviews` → tenant dashboard |
-| | `GET /api/reviews/property/:propertyId` | — | `usePropertyReviews` → `review-section.tsx` |
-| | `DELETE /api/reviews/:id` | Tenant | `useDeleteReview` |
+To view the complete API Integration workflow visit (default: `https://github.com/KeyaRaniMondal/RoostFinder_Frontend/blob/main/API_INTEGRATION.md`)
 
 ### Key User Flows
 
@@ -178,22 +148,15 @@ The browser **never calls the backend directly** — every request goes through 
 
 | Command | Description |
 |---|---|
-| `npm run dev` | Start the development server |
-| `npm run build` | Build for production |
-| `npm run start` | Start the production server |
-| `npm run lint` | Run ESLint |
+| `pnpm run build` | Build for production |
+| `pnpm dev` | Start the development server |
 
 ---
 
 ## 🤝 Contributing
 
 1. Fork the repo and create a feature branch
-2. Follow the existing hook/component conventions in `src/hooks` and `src/components`
-3. Run `npm run lint` before opening a PR
+2. Follow the existing hook/component conventions in `/hooks` and `/components`
 4. Submit a pull request with a clear description of the change
 
----
 
-## 📄 License
-
-This project is private and unlicensed for public distribution.
