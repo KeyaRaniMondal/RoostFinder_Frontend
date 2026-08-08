@@ -43,8 +43,8 @@ export default function LandlordOverviewPage() {
     <div className="space-y-8">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Landlord dashboard</h1>
-          <p className="mt-1 text-sm text-slate-500">
+          <h1 className="text-2xl font-bold text-foreground">Landlord dashboard</h1>
+          <p className="mt-1 text-sm text-muted-foreground">
             Welcome back, {user?.name}. Manage your portfolio.
           </p>
         </div>
@@ -83,10 +83,10 @@ export default function LandlordOverviewPage() {
               {[1, 2].map((i) => <Skeleton key={i} className="h-16 w-full" />)}
             </div>
           ) : properties?.length ? (
-            <div className="divide-y divide-slate-100">
+            <div className="divide-y divide-border">
               {properties.slice(0, 5).map((property) => (
                 <div key={property.id} className="flex items-center gap-4 py-3">
-                  <div className="relative h-14 w-20 shrink-0 overflow-hidden rounded-lg bg-slate-100">
+                  <div className="relative h-14 w-20 shrink-0 overflow-hidden rounded-lg bg-muted">
                     <Image
                       src={absoluteImageUrl(property.images?.[0]) ?? FALLBACK_IMAGE}
                       alt={property.title}
@@ -99,14 +99,14 @@ export default function LandlordOverviewPage() {
                   <div className="min-w-0 flex-1">
                     <Link
                       href={`/properties/${property.id}`}
-                      className="line-clamp-1 text-sm font-semibold text-slate-900 hover:text-brand-700"
+                      className="line-clamp-1 text-sm font-semibold text-foreground hover:text-brand-700"
                     >
                       {property.title}
                     </Link>
-                    <div className="mt-0.5 flex items-center gap-2 text-xs text-slate-500">
+                    <div className="mt-0.5 flex items-center gap-2 text-xs text-muted-foreground">
                       <span>{PROPERTY_TYPES[property.propertyType]}</span>·
                       <span>{PROPERTY_PURPOSES[property.purpose]}</span>·
-                      <span className="font-semibold text-slate-700">{formatPrice(property.price)}</span>
+                      <span className="font-semibold text-foreground">{formatPrice(property.price)}</span>
                     </div>
                   </div>
                   <Badge variant={property.status === "ACTIVE" ? "success" : property.status === "REJECTED" ? "danger" : "warning"}>
@@ -121,7 +121,7 @@ export default function LandlordOverviewPage() {
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="text-red-500 hover:bg-red-50 hover:text-red-600"
+                      className="text-red-500 hover:bg-red-50 hover:text-red-600 dark:text-red-400 dark:hover:bg-red-950 dark:hover:text-red-400"
                       onClick={() => handleDelete(property.id, property.title)}
                       aria-label="Delete property"
                     >
@@ -160,14 +160,14 @@ export default function LandlordOverviewPage() {
               {[1, 2].map((i) => <Skeleton key={i} className="h-14 w-full" />)}
             </div>
           ) : requests?.length ? (
-            <div className="divide-y divide-slate-100">
+            <div className="divide-y divide-border">
               {requests.slice(0, 5).map((request) => (
                 <div key={request.id} className="flex items-center justify-between gap-3 py-3">
                   <div className="min-w-0">
-                    <p className="line-clamp-1 text-sm font-medium text-slate-900">
+                    <p className="line-clamp-1 text-sm font-medium text-foreground">
                       {request.property?.title}
                     </p>
-                    <p className="text-xs text-slate-500">
+                    <p className="text-xs text-muted-foreground">
                       From {request.tenant?.name} · {request.tenant?.email}
                     </p>
                   </div>

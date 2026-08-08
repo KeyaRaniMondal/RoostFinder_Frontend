@@ -34,14 +34,14 @@ export function Pagination({ meta, onPageChange }: PaginationProps) {
       <button
         onClick={() => onPageChange(page - 1)}
         disabled={page <= 1}
-        className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-300 text-slate-600 transition-colors hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
+        className="flex h-9 w-9 items-center justify-center rounded-lg border border-border text-foreground transition-colors hover:bg-muted disabled:cursor-not-allowed disabled:opacity-40"
         aria-label="Previous page"
       >
         <ChevronLeft className="h-4 w-4" />
       </button>
       {pageNumbers(page, total).map((p, idx) =>
         p === "…" ? (
-          <span key={`ellipsis-${idx}`} className="px-2 text-slate-400">
+          <span key={`ellipsis-${idx}`} className="px-2 text-muted-foreground">
             …
           </span>
         ) : (
@@ -52,7 +52,7 @@ export function Pagination({ meta, onPageChange }: PaginationProps) {
               "h-9 min-w-9 rounded-lg px-2 text-sm font-medium transition-colors",
               p === page
                 ? "bg-brand-600 text-white"
-                : "border border-slate-300 text-slate-600 hover:bg-slate-50"
+                : "border border-border text-foreground hover:bg-muted"
             )}
           >
             {p}
@@ -62,7 +62,7 @@ export function Pagination({ meta, onPageChange }: PaginationProps) {
       <button
         onClick={() => onPageChange(page + 1)}
         disabled={page >= total}
-        className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-300 text-slate-600 transition-colors hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
+        className="flex h-9 w-9 items-center justify-center rounded-lg border border-border text-foreground transition-colors hover:bg-muted disabled:cursor-not-allowed disabled:opacity-40"
         aria-label="Next page"
       >
         <ChevronRight className="h-4 w-4" />

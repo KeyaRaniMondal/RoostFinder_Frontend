@@ -61,9 +61,9 @@ export function FilterSidebar({
   const update = (patch: Partial<PropertyFilterState>) => onChange({ ...filters, ...patch });
 
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-card lg:sticky lg:top-20">
+    <div className="rounded-xl border border-border bg-card p-5 shadow-card lg:sticky lg:top-20">
       <div className="flex items-center justify-between">
-        <h2 className="flex items-center gap-2 text-base font-semibold text-slate-900">
+        <h2 className="flex items-center gap-2 text-base font-semibold text-foreground">
           <SlidersHorizontal className="h-4 w-4 text-brand-600" /> Filters
         </h2>
         <button
@@ -78,7 +78,7 @@ export function FilterSidebar({
         <div>
           <Label htmlFor="search">Search</Label>
           <div className="relative">
-            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               id="search"
               placeholder="Title, area, district..."
@@ -150,7 +150,7 @@ export function FilterSidebar({
         </div>
 
         {typeof totalCount === "number" && (
-          <div className="rounded-lg bg-slate-50 px-3 py-2 text-xs font-medium text-slate-600">
+          <div className="rounded-lg bg-muted px-3 py-2 text-xs font-medium text-muted-foreground">
             {totalCount} propert{totalCount === 1 ? "y" : "ies"} found
           </div>
         )}

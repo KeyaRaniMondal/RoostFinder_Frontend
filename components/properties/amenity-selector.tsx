@@ -32,14 +32,14 @@ export function AmenitySelector({
             className={cn(
               "flex items-center gap-2 rounded-lg border px-3 py-2 text-left text-xs font-medium transition-colors",
               active
-                ? "border-brand-500 bg-brand-50 text-brand-800"
-                : "border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:bg-slate-50"
+                ? "border-brand-500 bg-brand-50 text-brand-800 dark:bg-brand-900 dark:text-brand-200"
+                : "border-border bg-card text-muted-foreground hover:border-border hover:bg-muted"
             )}
           >
             <span
               className={cn(
                 "flex h-4 w-4 shrink-0 items-center justify-center rounded border",
-                active ? "border-brand-600 bg-brand-600 text-white" : "border-slate-300 bg-white"
+                active ? "border-brand-600 bg-brand-600 text-white" : "border-border bg-card"
               )}
             >
               {active && <Check className="h-3 w-3" />}

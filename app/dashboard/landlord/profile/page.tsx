@@ -96,8 +96,8 @@ export default function LandlordProfilePage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-slate-900">Landlord profile</h1>
-        <p className="mt-1 text-sm text-slate-500">
+        <h1 className="text-2xl font-bold text-foreground">Landlord profile</h1>
+        <p className="mt-1 text-sm text-muted-foreground">
           {isNew
             ? "Complete your profile to start listing properties."
             : "Update your details below."}
@@ -105,7 +105,7 @@ export default function LandlordProfilePage() {
       </div>
 
       {serverError && (
-        <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">
+        <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700 dark:border-red-900 dark:bg-red-950 dark:text-red-300">
           {serverError}
         </div>
       )}
@@ -159,7 +159,7 @@ export default function LandlordProfilePage() {
               </div>
             </div>
 
-            <div className="flex items-center gap-3 border-t border-slate-100 pt-5">
+            <div className="flex items-center gap-3 border-t border-border pt-5">
               <Button type="submit" loading={createProfile.isPending || updateProfile.isPending} size="lg">
                 {isNew ? "Create profile" : "Save changes"}
               </Button>

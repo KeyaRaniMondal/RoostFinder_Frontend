@@ -14,9 +14,9 @@ export function PropertyCard({ property }: { property: Property }) {
   return (
     <Link
       href={`/properties/${property.id}`}
-      className="group flex flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-card transition-all hover:-translate-y-0.5 hover:shadow-lg"
+      className="group flex flex-col overflow-hidden rounded-xl border border-border bg-card shadow-card transition-all hover:-translate-y-0.5 hover:shadow-lg"
     >
-      <div className="relative aspect-[4/3] overflow-hidden bg-slate-100">
+      <div className="relative aspect-[4/3] overflow-hidden bg-muted">
         <Image
           src={image ?? FALLBACK_IMAGE}
           alt={property.title}
@@ -28,7 +28,7 @@ export function PropertyCard({ property }: { property: Property }) {
           }}
         />
         <div className="absolute left-3 top-3 flex gap-2">
-          <Badge className="bg-white/90 backdrop-blur">{PROPERTY_TYPES[property.propertyType]}</Badge>
+          <Badge className="bg-background/90 backdrop-blur">{PROPERTY_TYPES[property.propertyType]}</Badge>
           <Badge
             className={
               property.purpose === "RENT"
@@ -41,7 +41,7 @@ export function PropertyCard({ property }: { property: Property }) {
         </div>
         {property.status !== "ACTIVE" && (
           <div className="absolute inset-0 flex items-center justify-center bg-slate-900/50">
-            <span className="rounded-full bg-white px-3 py-1 text-xs font-bold uppercase tracking-wide text-slate-800">
+            <span className="rounded-full bg-background px-3 py-1 text-xs font-bold uppercase tracking-wide text-foreground">
               {property.status}
             </span>
           </div>
@@ -50,55 +50,55 @@ export function PropertyCard({ property }: { property: Property }) {
 
       <div className="flex flex-1 flex-col p-4">
         <div className="flex items-start justify-between gap-2">
-          <h3 className="line-clamp-1 font-semibold text-slate-900 group-hover:text-brand-700">
+          <h3 className="line-clamp-1 font-semibold text-foreground group-hover:text-brand-700">
             {property.title}
           </h3>
           <p className="shrink-0 text-base font-bold text-brand-700">
             {formatPrice(property.price)}
-            <span className="text-xs font-medium text-slate-400">
+            <span className="text-xs font-medium text-muted-foreground">
               {property.purpose === "RENT" ? "/mo" : ""}
             </span>
           </p>
         </div>
 
-        <p className="mt-1 flex items-center gap-1 text-xs text-slate-500">
+        <p className="mt-1 flex items-center gap-1 text-xs text-muted-foreground">
           <MapPin className="h-3.5 w-3.5 shrink-0" />
           <span className="line-clamp-1">
             {[property.city, property.district, property.area].filter(Boolean).join(", ")}
           </span>
         </p>
 
-        <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-slate-600">
+        <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-muted-foreground">
           {typeof property.bedrooms === "number" && (
             <span className="flex items-center gap-1">
-              <BedDouble className="h-3.5 w-3.5 text-slate-400" /> {property.bedrooms} beds
+              <BedDouble className="h-3.5 w-3.5 text-muted-foreground" /> {property.bedrooms} beds
             </span>
           )}
           {typeof property.bathrooms === "number" && (
             <span className="flex items-center gap-1">
-              <Bath className="h-3.5 w-3.5 text-slate-400" /> {property.bathrooms} baths
+              <Bath className="h-3.5 w-3.5 text-muted-foreground" /> {property.bathrooms} baths
             </span>
           )}
           {typeof property.areaSize === "number" && (
             <span className="flex items-center gap-1">
-              <Ruler className="h-3.5 w-3.5 text-slate-400" /> {property.areaSize} sqft
+              <Ruler className="h-3.5 w-3.5 text-muted-foreground" /> {property.areaSize} sqft
             </span>
           )}
         </div>
 
         {property.amenities?.length > 0 && (
-          <div className="mt-3 flex flex-wrap gap-1.5 border-t border-slate-100 pt-3">
+          <div className="mt-3 flex flex-wrap gap-1.5 border-t border-border pt-3">
             {property.amenities.slice(0, 3).map((amenity) => (
               <span
                 key={amenity}
-                className="flex items-center gap-1 rounded-md bg-slate-100 px-2 py-0.5 text-[11px] font-medium text-slate-600"
+                className="flex items-center gap-1 rounded-md bg-muted px-2 py-0.5 text-[11px] font-medium text-muted-foreground"
               >
                 <Building2 className="h-3 w-3" />
                 {amenity.replaceAll("_", " ").toLowerCase()}
               </span>
             ))}
             {property.amenities.length > 3 && (
-              <span className="rounded-md bg-slate-100 px-2 py-0.5 text-[11px] font-medium text-slate-600">
+              <span className="rounded-md bg-muted px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
                 +{property.amenities.length - 3} more
               </span>
             )}
@@ -111,12 +111,12 @@ export function PropertyCard({ property }: { property: Property }) {
 
 export function PropertyCardSkeleton() {
   return (
-    <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-card">
-      <div className="aspect-[4/3] animate-pulse bg-slate-200" />
+    <div className="overflow-hidden rounded-xl border border-border bg-card shadow-card">
+      <div className="aspect-[4/3] animate-pulse bg-muted" />
       <div className="space-y-3 p-4">
-        <div className="h-4 w-3/4 animate-pulse rounded bg-slate-200" />
-        <div className="h-3 w-1/2 animate-pulse rounded bg-slate-200" />
-        <div className="h-3 w-2/3 animate-pulse rounded bg-slate-200" />
+        <div className="h-4 w-3/4 animate-pulse rounded bg-muted" />
+        <div className="h-3 w-1/2 animate-pulse rounded bg-muted" />
+        <div className="h-3 w-2/3 animate-pulse rounded bg-muted" />
       </div>
     </div>
   );

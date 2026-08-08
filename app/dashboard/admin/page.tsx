@@ -24,8 +24,8 @@ export default function AdminOverviewPage() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-bold text-slate-900">Admin dashboard</h1>
-        <p className="mt-1 text-sm text-slate-500">
+        <h1 className="text-2xl font-bold text-foreground">Admin dashboard</h1>
+        <p className="mt-1 text-sm text-muted-foreground">
           Platform overview, {user?.name}.
         </p>
       </div>
@@ -63,26 +63,26 @@ export default function AdminOverviewPage() {
               {[1, 2].map((i) => <Skeleton key={i} className="h-12 w-full" />)}
             </div>
           ) : rentals?.data.length ? (
-            <div className="divide-y divide-slate-100">
+            <div className="divide-y divide-border">
               {rentals.data.slice(0, 6).map((rental) => (
                 <div key={rental.id} className="flex items-center justify-between gap-3 py-3">
                   <div className="min-w-0">
-                    <p className="line-clamp-1 text-sm font-medium text-slate-900">
+                    <p className="line-clamp-1 text-sm font-medium text-foreground">
                       {rental.property?.title}
                     </p>
-                    <p className="text-xs text-slate-500">
+                    <p className="text-xs text-muted-foreground">
                       {rental.tenant?.name} · {rental.tenant?.email}
                     </p>
                   </div>
                   <span
                     className={`shrink-0 rounded-full px-2.5 py-0.5 text-xs font-semibold ${
                       rental.status === "PENDING"
-                        ? "bg-amber-100 text-amber-800"
+                        ? "bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300"
                         : rental.status === "APPROVED"
-                          ? "bg-blue-100 text-blue-800"
+                          ? "bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-300"
                           : rental.status === "REJECTED"
-                            ? "bg-red-100 text-red-700"
-                            : "bg-slate-100 text-slate-500"
+                            ? "bg-red-100 text-red-700 dark:bg-red-950 dark:text-red-300"
+                            : "bg-muted text-muted-foreground"
                     }`}
                   >
                     {rental.status}
@@ -91,7 +91,7 @@ export default function AdminOverviewPage() {
               ))}
             </div>
           ) : (
-            <p className="py-6 text-center text-sm text-slate-400">No rental requests yet.</p>
+            <p className="py-6 text-center text-sm text-muted-foreground">No rental requests yet.</p>
           )}
         </CardContent>
       </Card>

@@ -21,7 +21,7 @@ export function ReviewSection({ propertyId }: { propertyId: string }) {
   }
 
   if (isError) {
-    return <p className="text-sm text-red-600">Failed to load reviews.</p>;
+    return <p className="text-sm text-red-600 dark:text-red-400">Failed to load reviews.</p>;
   }
 
   if (!reviews?.length) {
@@ -38,31 +38,31 @@ export function ReviewSection({ propertyId }: { propertyId: string }) {
   return (
     <div>
       <div className="flex items-center gap-3">
-        <h2 className="text-lg font-semibold text-slate-900">Reviews</h2>
-        <div className="flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1">
+        <h2 className="text-lg font-semibold text-foreground">Reviews</h2>
+        <div className="flex items-center gap-2 rounded-full bg-muted px-3 py-1">
           <Stars value={Math.round(average)} readonly size="sm" />
-          <span className="text-sm font-semibold text-slate-700">
+          <span className="text-sm font-semibold text-foreground">
             {average.toFixed(1)} ({reviews.length})
           </span>
         </div>
       </div>
       <div className="mt-4 space-y-4">
         {reviews.map((review) => (
-          <div key={review.id} className="rounded-xl border border-slate-200 bg-white p-4">
+          <div key={review.id} className="rounded-xl border border-border bg-card p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-100 text-sm font-bold text-brand-700">
+                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-100 text-sm font-bold text-brand-700 dark:bg-brand-900 dark:text-brand-200">
                   {review.tenant?.name?.charAt(0)?.toUpperCase() ?? "U"}
                 </span>
                 <div>
-                  <p className="text-sm font-semibold text-slate-900">{review.tenant?.name ?? "Tenant"}</p>
-                  <p className="text-xs text-slate-400">{formatDate(review.createdAt)}</p>
+                  <p className="text-sm font-semibold text-foreground">{review.tenant?.name ?? "Tenant"}</p>
+                  <p className="text-xs text-muted-foreground">{formatDate(review.createdAt)}</p>
                 </div>
               </div>
               <Stars value={review.rating} readonly size="sm" />
             </div>
             {review.comment && (
-              <p className="mt-3 text-sm leading-relaxed text-slate-600">{review.comment}</p>
+              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{review.comment}</p>
             )}
           </div>
         ))}

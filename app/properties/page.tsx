@@ -38,8 +38,8 @@ const totalPages = Math.max(
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl">Browse properties</h1>
-        <p className="mt-1 text-sm text-slate-500">
+        <h1 className="text-2xl font-bold text-foreground sm:text-3xl">Browse properties</h1>
+        <p className="mt-1 text-sm text-muted-foreground">
           Search, filter and find your next place.
         </p>
       </div>
@@ -67,7 +67,7 @@ const totalPages = Math.max(
             <>
               <PropertyGrid properties={filtered} />
               {filters.amenities.length > 0 && data && filtered.length < data.data.length && (
-                <p className="mt-4 text-center text-xs text-slate-400">
+                <p className="mt-4 text-center text-xs text-muted-foreground">
                   Amenity filter applied — showing {filtered.length} of {data.meta.total} total
                 </p>
               )}

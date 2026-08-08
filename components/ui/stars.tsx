@@ -27,7 +27,7 @@ export function Stars({
           <Star
             className={cn(
               dims,
-              star <= value ? "fill-amber-400 text-amber-400" : "fill-slate-200 text-slate-200"
+              star <= value ? "fill-amber-400 text-amber-400" : "fill-slate-200 text-slate-200 dark:fill-slate-700 dark:text-slate-700"
             )}
           />
         </button>

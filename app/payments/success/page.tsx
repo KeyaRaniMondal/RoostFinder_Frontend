@@ -31,8 +31,8 @@ function SuccessContent() {
   if (error) {
     return (
       <div className="mx-auto max-w-lg px-4 py-24 text-center">
-        <h1 className="text-2xl font-bold text-slate-900">Payment could not be verified</h1>
-        <p className="mt-3 text-sm text-slate-500">{error}</p>
+        <h1 className="text-2xl font-bold text-foreground">Payment could not be verified</h1>
+        <p className="mt-3 text-sm text-muted-foreground">{error}</p>
         <Link href="/dashboard/tenant" className="mt-6 inline-block">
           <Button>Go to dashboard</Button>
         </Link>
@@ -42,15 +42,15 @@ function SuccessContent() {
 
   return (
     <div className="mx-auto max-w-lg px-4 py-24 text-center animate-fade-in">
-      <span className="inline-flex h-20 w-20 items-center justify-center rounded-full bg-emerald-100">
+      <span className="inline-flex h-20 w-20 items-center justify-center rounded-full bg-emerald-100 dark:bg-emerald-950">
         {verified ? (
-          <CheckCircle2 className="h-11 w-11 text-emerald-600" />
+          <CheckCircle2 className="h-11 w-11 text-emerald-600 dark:text-emerald-400" />
         ) : (
-          <Loader2 className="h-11 w-11 animate-spin text-emerald-600" />
+          <Loader2 className="h-11 w-11 animate-spin text-emerald-600 dark:text-emerald-400" />
         )}
       </span>
-      <h1 className="mt-6 text-3xl font-bold text-slate-900">Payment successful!</h1>
-      <p className="mt-3 text-sm text-slate-500">
+      <h1 className="mt-6 text-3xl font-bold text-foreground">Payment successful!</h1>
+      <p className="mt-3 text-sm text-muted-foreground">
         {verified
           ? "Thank you! Your rental payment has been received. The rental is now active."
           : "Verifying your payment with the gateway..."}
@@ -71,7 +71,7 @@ function SuccessContent() {
 
 export default function PaymentSuccessPage() {
   return (
-    <Suspense fallback={<div className="py-24 text-center text-sm text-slate-400">Loading...</div>}>
+    <Suspense fallback={<div className="py-24 text-center text-sm text-muted-foreground">Loading...</div>}>
       <SuccessContent />
     </Suspense>
   );

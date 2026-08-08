@@ -75,7 +75,7 @@ export function PropertyForm({
   return (
     <form onSubmit={submit} className="space-y-8">
       <section className="space-y-4">
-        <h2 className="border-b border-slate-100 pb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">
+        <h2 className="border-b border-border pb-2 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
           Basic information
         </h2>
         <div>
@@ -121,7 +121,7 @@ export function PropertyForm({
       </section>
 
       <section className="space-y-4">
-        <h2 className="border-b border-slate-100 pb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">
+        <h2 className="border-b border-border pb-2 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
           Location
         </h2>
         <div className="grid gap-4 sm:grid-cols-2">
@@ -137,7 +137,7 @@ export function PropertyForm({
       </section>
 
       <section className="space-y-4">
-        <h2 className="border-b border-slate-100 pb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">
+        <h2 className="border-b border-border pb-2 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
           Details
         </h2>
         <div className="grid gap-4 sm:grid-cols-3">
@@ -148,18 +148,18 @@ export function PropertyForm({
           {input("Total floors", "totalFloors", errors.totalFloors?.message)}
           {input("Area size (sqft)", "areaSize", errors.areaSize?.message)}
         </div>
-        <label className="flex items-center gap-2.5 rounded-lg border border-slate-200 px-4 py-3">
+        <label className="flex items-center gap-2.5 rounded-lg border border-border px-4 py-3">
           <input
             type="checkbox"
-            className="h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500"
+            className="h-4 w-4 rounded border-border text-brand-600 focus:ring-brand-500"
             {...register("furnished")}
           />
-          <span className="text-sm font-medium text-slate-700">This property is furnished</span>
+          <span className="text-sm font-medium text-foreground">This property is furnished</span>
         </label>
       </section>
 
       <section className="space-y-4">
-        <h2 className="border-b border-slate-100 pb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">
+        <h2 className="border-b border-border pb-2 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
           Images
         </h2>
         {imageInputs.map((value, index) => (
@@ -177,7 +177,7 @@ export function PropertyForm({
               type="button"
               variant="ghost"
               size="icon"
-              className="mt-0.5 text-red-500 hover:bg-red-50 hover:text-red-600"
+              className="mt-0.5 text-red-500 hover:bg-red-50 hover:text-red-600 dark:text-red-400 dark:hover:bg-red-950 dark:hover:text-red-300"
               onClick={() => removeImage(index)}
               aria-label={`Remove image ${index + 1}`}
             >
@@ -196,7 +196,7 @@ export function PropertyForm({
       </section>
 
       <section className="space-y-4">
-        <h2 className="border-b border-slate-100 pb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">
+        <h2 className="border-b border-border pb-2 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
           Amenities
         </h2>
         <AmenitySelector
@@ -221,7 +221,7 @@ export function PropertyForm({
         </section>
       )}
 
-      <div className="flex items-center gap-3 border-t border-slate-100 pt-5">
+      <div className="flex items-center gap-3 border-t border-border pt-5">
         <Button type="submit" loading={isSubmitting} size="lg">
           {isSubmitting ? "Saving..." : submitLabel}
         </Button>

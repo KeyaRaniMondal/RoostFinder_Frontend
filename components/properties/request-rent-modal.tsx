@@ -68,7 +68,7 @@ export function RequestRentModal({ propertyId, propertyTitle, open, onClose }: R
     >
       {!user ? (
         <div className="py-4 text-center">
-          <p className="text-sm text-slate-600">You need to log in before requesting a rental.</p>
+          <p className="text-sm text-muted-foreground">You need to log in before requesting a rental.</p>
           <Button
             className="mt-4"
             onClick={() => router.push(`/auth/login?next=/properties/${propertyId}`)}

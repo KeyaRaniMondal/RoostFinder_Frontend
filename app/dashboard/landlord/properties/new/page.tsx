@@ -49,7 +49,7 @@ export default function NewPropertyPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-slate-900">Add a property</h1>
+      <h1 className="text-2xl font-bold text-foreground">Add a property</h1>
       <Card>
         <CardHeader>
           <CardTitle>Listing details</CardTitle>

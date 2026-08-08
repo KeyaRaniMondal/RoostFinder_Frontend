@@ -74,13 +74,13 @@ function RegisterForm() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-slate-900">Create your account</h1>
-      <p className="mt-1 text-sm text-slate-500">
+      <h1 className="text-2xl font-bold text-foreground">Create your account</h1>
+      <p className="mt-1 text-sm text-muted-foreground">
         Choose your role to get started.
       </p>
 
       {serverError && (
-        <div className="mt-5 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">
+        <div className="mt-5 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700 dark:border-red-900 dark:bg-red-950 dark:text-red-300">
           {serverError}
         </div>
       )}
@@ -100,19 +100,19 @@ function RegisterForm() {
                   className={cn(
                     "flex flex-col items-center gap-2 rounded-xl border-2 px-3 py-4 text-center transition-colors",
                     active
-                      ? "border-brand-600 bg-brand-50"
-                      : "border-slate-200 bg-white hover:border-slate-300"
+                      ? "border-brand-600 bg-brand-50 dark:bg-brand-900"
+                      : "border-border bg-card hover:border-border"
                   )}
                 >
                   <span
                     className={cn(
                       "flex h-10 w-10 items-center justify-center rounded-full",
-                      active ? "bg-brand-600 text-white" : "bg-slate-100 text-slate-500"
+                      active ? "bg-brand-600 text-white" : "bg-muted text-muted-foreground"
                     )}
                   >
                     <Icon className="h-5 w-5" />
                   </span>
-                  <span className={cn("text-sm font-semibold", active ? "text-brand-800" : "text-slate-700")}>
+                  <span className={cn("text-sm font-semibold", active ? "text-brand-800" : "text-foreground")}>
                     {ROLES[role].label}
                   </span>
                   {active && <Check className="h-4 w-4 text-brand-600" />}
@@ -177,7 +177,7 @@ function RegisterForm() {
         </Button>
       </form>
 
-      <p className="mt-6 text-center text-sm text-slate-500">
+      <p className="mt-6 text-center text-sm text-muted-foreground">
         Already have an account?{" "}
         <Link href="/auth/login" className="font-medium text-brand-600 hover:text-brand-700">
           Log in
@@ -189,7 +189,7 @@ function RegisterForm() {
 
 export default function RegisterPage() {
   return (
-    <Suspense fallback={<p className="text-sm text-slate-400">Loading...</p>}>
+    <Suspense fallback={<p className="text-sm text-muted-foreground">Loading...</p>}>
       <RegisterForm />
     </Suspense>
   );

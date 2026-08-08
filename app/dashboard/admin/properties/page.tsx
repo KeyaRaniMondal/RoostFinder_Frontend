@@ -41,13 +41,13 @@ export default function AdminPropertiesPage() {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h1 className="text-2xl font-bold text-slate-900">Content moderation</h1>
-        <span className="text-sm text-slate-500">{data?.meta.total ?? 0} listings</span>
+        <h1 className="text-2xl font-bold text-foreground">Content moderation</h1>
+        <span className="text-sm text-muted-foreground">{data?.meta.total ?? 0} listings</span>
       </div>
 
       <div className="grid gap-3 sm:grid-cols-[1fr_200px]">
         <div className="relative">
-          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             placeholder="Search by title or city..."
             className="pl-9"
@@ -76,17 +76,17 @@ export default function AdminPropertiesPage() {
             </div>
           ) : isError ? (
             <div className="p-8 text-center">
-              <p className="text-sm text-red-600">Failed to load properties.</p>
+              <p className="text-sm text-red-600 dark:text-red-400">Failed to load properties.</p>
               <Button variant="outline" size="sm" className="mt-3" onClick={() => refetch()}>
                 Retry
               </Button>
             </div>
           ) : data?.data.length ? (
-            <div className="divide-y divide-slate-100">
+            <div className="divide-y divide-border">
               {data.data.map((property) => (
                 <div key={property.id} className="flex items-center gap-4 p-4">
                   <Link href={`/properties/${property.id}`} className="shrink-0">
-                    <div className="relative h-16 w-24 overflow-hidden rounded-lg bg-slate-100">
+                    <div className="relative h-16 w-24 overflow-hidden rounded-lg bg-muted">
                       <Image
                         src={absoluteImageUrl(property.images?.[0]) ?? FALLBACK_IMAGE}
                         alt={property.title}
@@ -100,17 +100,17 @@ export default function AdminPropertiesPage() {
                   <div className="min-w-0 flex-1">
                     <Link
                       href={`/properties/${property.id}`}
-                      className="line-clamp-1 font-semibold text-slate-900 hover:text-brand-700"
+                      className="line-clamp-1 font-semibold text-foreground hover:text-brand-700"
                     >
                       {property.title}
                     </Link>
-                    <p className="mt-0.5 text-xs text-slate-500">
+                    <p className="mt-0.5 text-xs text-muted-foreground">
                       {PROPERTY_TYPES[property.propertyType]} · {PROPERTY_PURPOSES[property.purpose]} ·{" "}
                       {property.city}, {property.district} ·{" "}
-                      <span className="font-semibold text-slate-700">{formatPrice(property.price)}</span>
+                      <span className="font-semibold text-foreground">{formatPrice(property.price)}</span>
                     </p>
                     {property.landlord?.user && (
-                      <p className="mt-0.5 text-xs text-slate-400">
+                      <p className="mt-0.5 text-xs text-muted-foreground">
                         Listed by {property.landlord.user.name} ({property.landlord.user.email})
                       </p>
                     )}

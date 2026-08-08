@@ -39,7 +39,7 @@ export function Modal({ open, onClose, title, description, children, size = "md"
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div
-        className="absolute inset-0 bg-slate-900/50 backdrop-blur-sm animate-fade-in"
+        className="absolute inset-0 bg-slate-950/60 backdrop-blur-sm animate-fade-in"
         onClick={onClose}
         aria-hidden
       />
@@ -47,18 +47,18 @@ export function Modal({ open, onClose, title, description, children, size = "md"
         role="dialog"
         aria-modal="true"
         className={cn(
-          "relative z-10 max-h-[90vh] w-full overflow-y-auto rounded-2xl bg-white shadow-2xl animate-fade-in",
+          "relative z-10 max-h-[90vh] w-full overflow-y-auto rounded-2xl bg-popover text-popover-foreground shadow-2xl animate-fade-in",
           sizeClasses[size]
         )}
       >
-        <div className="flex items-start justify-between border-b border-slate-100 px-6 py-4">
+        <div className="flex items-start justify-between border-b border-border px-6 py-4">
           <div>
-            {title && <h2 className="text-lg font-semibold text-slate-900">{title}</h2>}
-            {description && <p className="mt-0.5 text-sm text-slate-500">{description}</p>}
+            {title && <h2 className="text-lg font-semibold text-foreground">{title}</h2>}
+            {description && <p className="mt-0.5 text-sm text-muted-foreground">{description}</p>}
           </div>
           <button
             onClick={onClose}
-            className="rounded-lg p-1.5 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-600"
+            className="rounded-lg p-1.5 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
             aria-label="Close dialog"
           >
             <X className="h-5 w-5" />

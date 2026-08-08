@@ -28,9 +28,9 @@ export default function PayPage() {
   if (isError || !request) {
     return (
       <div className="mx-auto max-w-lg py-16 text-center">
-        <AlertTriangle className="mx-auto h-10 w-10 text-amber-500" />
-        <h1 className="mt-3 text-xl font-bold text-slate-900">Request not found</h1>
-        <p className="mt-2 text-sm text-slate-500">
+        <AlertTriangle className="mx-auto h-10 w-10 text-amber-500 dark:text-amber-400" />
+        <h1 className="mt-3 text-xl font-bold text-foreground">Request not found</h1>
+        <p className="mt-2 text-sm text-muted-foreground">
           This request doesn&apos;t exist or you don&apos;t have access to it.
         </p>
         <Link href="/dashboard/tenant">
@@ -59,8 +59,8 @@ export default function PayPage() {
   return (
     <div className="mx-auto max-w-2xl space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-slate-900">Complete payment</h1>
-        <p className="mt-1 text-sm text-slate-500">
+        <h1 className="text-2xl font-bold text-foreground">Complete payment</h1>
+        <p className="mt-1 text-sm text-muted-foreground">
           Secure payment via Stripe checkout. You will be redirected to complete the purchase.
         </p>
       </div>
@@ -68,7 +68,7 @@ export default function PayPage() {
       <Card>
         <CardContent className="flex items-center gap-4">
           {property && (
-            <div className="relative h-20 w-32 shrink-0 overflow-hidden rounded-lg bg-slate-100">
+            <div className="relative h-20 w-32 shrink-0 overflow-hidden rounded-lg bg-muted">
               <Image
                 src={absoluteImageUrl(property.images?.[0]) ?? FALLBACK_IMAGE}
                 alt={property.title}
@@ -79,19 +79,19 @@ export default function PayPage() {
             </div>
           )}
           <div className="min-w-0 flex-1">
-            <p className="text-sm font-medium text-slate-400">
+            <p className="text-sm font-medium text-muted-foreground">
               {property ? PROPERTY_TYPES[property.propertyType] : "Property"}
             </p>
-            <h2 className="line-clamp-1 text-lg font-semibold text-slate-900">
+            <h2 className="line-clamp-1 text-lg font-semibold text-foreground">
               {property?.title ?? "Property"}
             </h2>
-            <div className="mt-1.5 flex flex-wrap items-center gap-2 text-sm text-slate-500">
+            <div className="mt-1.5 flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
               <RentalStatusBadge status={request.status} />
               {payment && <PaymentStatusBadge status={payment.status} />}
             </div>
           </div>
           <div className="shrink-0 text-right">
-            <p className="text-xs text-slate-400">Amount due</p>
+            <p className="text-xs text-muted-foreground">Amount due</p>
             <p className="text-2xl font-bold text-brand-700">
               {property ? formatPrice(property.price) : formatPrice(payment?.amount ?? 0)}
             </p>
@@ -100,8 +100,8 @@ export default function PayPage() {
       </Card>
 
       {request.status !== "APPROVED" && !alreadyPaid && (
-        <Card className="border-amber-200 bg-amber-50">
-          <CardContent className="flex items-center gap-3 text-sm text-amber-800">
+        <Card className="border-amber-200 bg-amber-50 dark:bg-amber-950">
+          <CardContent className="flex items-center gap-3 text-sm text-amber-800 dark:text-amber-300">
             <AlertTriangle className="h-5 w-5 shrink-0" />
             <p>
               This request is <b>{request.status}</b>. Payment is only possible after the
@@ -112,11 +112,11 @@ export default function PayPage() {
       )}
 
       {alreadyPaid ? (
-        <Card className="border-emerald-200 bg-emerald-50">
+        <Card className="border-emerald-200 bg-emerald-50 dark:bg-emerald-950">
           <CardContent className="flex flex-col items-center gap-2 py-8 text-center">
-            <CheckCircle2 className="h-12 w-12 text-emerald-600" />
-            <h2 className="text-lg font-bold text-slate-900">Payment already completed</h2>
-            <p className="text-sm text-slate-600">
+            <CheckCircle2 className="h-12 w-12 text-emerald-600 dark:text-emerald-400" />
+            <h2 className="text-lg font-bold text-foreground">Payment already completed</h2>
+            <p className="text-sm text-muted-foreground">
               This rental has been paid for. No further action is needed.
             </p>
             <Link href="/dashboard/tenant" className="mt-2">
@@ -137,7 +137,7 @@ export default function PayPage() {
         </Button>
       )}
 
-      <p className="text-center text-xs text-slate-400">
+      <p className="text-center text-xs text-muted-foreground">
         Payments are processed securely by Stripe. We never store your card details.
       </p>
     </div>

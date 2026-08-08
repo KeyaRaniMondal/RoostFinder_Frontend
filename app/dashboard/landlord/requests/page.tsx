@@ -46,7 +46,7 @@ export default function LandlordRequestsPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-slate-900">Incoming requests</h1>
+        <h1 className="text-2xl font-bold text-foreground">Incoming requests</h1>
         <Badge variant="outline" className="px-3 py-1">
           {requests?.length ?? 0} total
         </Badge>
@@ -65,7 +65,7 @@ export default function LandlordRequestsPage() {
               <CardContent className="flex flex-col gap-4 p-4 sm:flex-row sm:items-center">
                 {request.property && (
                   <Link href={`/properties/${request.property.id}`} className="shrink-0">
-                    <div className="relative h-24 w-32 overflow-hidden rounded-lg bg-slate-100">
+                    <div className="relative h-24 w-32 overflow-hidden rounded-lg bg-muted">
                       <Image
                         src={absoluteImageUrl(request.property.images?.[0]) ?? FALLBACK_IMAGE}
                         alt={request.property.title}
@@ -81,22 +81,22 @@ export default function LandlordRequestsPage() {
                   <div className="flex flex-wrap items-center gap-2">
                     <Link
                       href={`/properties/${request.propertyId}`}
-                      className="line-clamp-1 font-semibold text-slate-900 hover:text-brand-700"
+                      className="line-clamp-1 font-semibold text-foreground hover:text-brand-700"
                     >
                       {request.property?.title ?? "Property"}
                     </Link>
                     <RentalStatusBadge status={request.status} />
                   </div>
-                  <p className="text-sm text-slate-600">
-                    <span className="font-medium text-slate-900">{request.tenant?.name}</span>{" "}
+                  <p className="text-sm text-muted-foreground">
+                    <span className="font-medium text-foreground">{request.tenant?.name}</span>{" "}
                     ({request.tenant?.email})
                   </p>
-                  <p className="text-xs text-slate-400">
+                  <p className="text-xs text-muted-foreground">
                     Requested {formatDate(request.createdAt)}
                     {request.moveInDate && ` · Move-in ${formatDate(request.moveInDate)}`}
                   </p>
                   {request.message && (
-                    <p className="rounded-lg bg-slate-50 px-3 py-2 text-sm text-slate-600">
+                    <p className="rounded-lg bg-muted px-3 py-2 text-sm text-muted-foreground">
                       “{request.message}”
                     </p>
                   )}
@@ -122,7 +122,7 @@ export default function LandlordRequestsPage() {
                       </Button>
                     </>
                   ) : (
-                    <span className="text-xs text-slate-400">Decision made</span>
+                    <span className="text-xs text-muted-foreground">Decision made</span>
                   )}
                 </div>
               </CardContent>

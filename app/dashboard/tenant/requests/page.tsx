@@ -12,7 +12,7 @@ export default function TenantRequestsPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-slate-900">My requests</h1>
+      <h1 className="text-2xl font-bold text-foreground">My requests</h1>
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">

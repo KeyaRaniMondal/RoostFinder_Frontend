@@ -36,7 +36,7 @@ export function PaymentsTable({
     <div className="overflow-x-auto">
       <table className="w-full text-left text-sm">
         <thead>
-          <tr className="border-b border-slate-200 text-xs uppercase tracking-wide text-slate-500">
+          <tr className="border-b border-border text-xs uppercase tracking-wide text-muted-foreground">
             <th className="px-3 py-2.5 font-semibold">Property</th>
             <th className="px-3 py-2.5 font-semibold">Amount</th>
             <th className="px-3 py-2.5 font-semibold">Status</th>
@@ -46,18 +46,18 @@ export function PaymentsTable({
         </thead>
         <tbody>
           {payments.map((payment) => (
-            <tr key={payment.id} className="border-b border-slate-100 last:border-0 hover:bg-slate-50/60">
-              <td className="px-3 py-3 font-medium text-slate-900">
+            <tr key={payment.id} className="border-b border-border last:border-0 hover:bg-muted/60">
+              <td className="px-3 py-3 font-medium text-foreground">
                 {payment.property?.title ?? "Property"}
               </td>
-              <td className="px-3 py-3 font-semibold text-slate-800">
+              <td className="px-3 py-3 font-semibold text-foreground">
                 {formatPrice(payment.amount, payment.currency)}
               </td>
               <td className="px-3 py-3">
                 <PaymentStatusBadge status={payment.status} />
               </td>
-              <td className="px-3 py-3 text-slate-600">{formatDateTime(payment.createdAt)}</td>
-              <td className="hidden px-3 py-3 font-mono text-xs text-slate-400 sm:table-cell">
+              <td className="px-3 py-3 text-muted-foreground">{formatDateTime(payment.createdAt)}</td>
+              <td className="hidden px-3 py-3 font-mono text-xs text-muted-foreground sm:table-cell">
                 {payment.stripePaymentIntentId?.slice(0, 18) ?? payment.stripeSessionId?.slice(0, 18) ?? "—"}
               </td>
             </tr>

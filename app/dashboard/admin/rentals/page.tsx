@@ -27,8 +27,8 @@ export default function AdminRentalsPage() {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h1 className="text-2xl font-bold text-slate-900">Rental requests</h1>
-        <span className="text-sm text-slate-500">{data?.meta.total ?? 0} requests</span>
+        <h1 className="text-2xl font-bold text-foreground">Rental requests</h1>
+        <span className="text-sm text-muted-foreground">{data?.meta.total ?? 0} requests</span>
       </div>
 
       <div className="w-full sm:max-w-xs">
@@ -52,18 +52,18 @@ export default function AdminRentalsPage() {
             </div>
           ) : isError ? (
             <div className="p-8 text-center">
-              <p className="text-sm text-red-600">Failed to load rental requests.</p>
+              <p className="text-sm text-red-600 dark:text-red-400">Failed to load rental requests.</p>
               <Button variant="outline" size="sm" className="mt-3" onClick={() => refetch()}>
                 Retry
               </Button>
             </div>
           ) : data?.data.length ? (
-            <div className="divide-y divide-slate-100">
+            <div className="divide-y divide-border">
               {data.data.map((rental) => (
                 <div key={rental.id} className="flex items-center gap-4 p-4">
                   {rental.property && (
                     <Link href={`/properties/${rental.property.id}`} className="shrink-0">
-                      <div className="relative h-16 w-24 overflow-hidden rounded-lg bg-slate-100">
+                      <div className="relative h-16 w-24 overflow-hidden rounded-lg bg-muted">
                         <Image
                           src={absoluteImageUrl(rental.property.images?.[0]) ?? FALLBACK_IMAGE}
                           alt={rental.property.title}
@@ -78,16 +78,16 @@ export default function AdminRentalsPage() {
                   <div className="min-w-0 flex-1">
                     <Link
                       href={`/properties/${rental.propertyId}`}
-                      className="line-clamp-1 font-semibold text-slate-900 hover:text-brand-700"
+                      className="line-clamp-1 font-semibold text-foreground hover:text-brand-700"
                     >
                       {rental.property?.title ?? "Property"}
                     </Link>
-                    <p className="mt-0.5 text-xs text-slate-500">
+                    <p className="mt-0.5 text-xs text-muted-foreground">
                       {rental.tenant?.name} ({rental.tenant?.email}) · {formatDate(rental.createdAt)}
                       {rental.property && <> · {formatPrice(rental.property.price)}</>}
                     </p>
                     {rental.message && (
-                      <p className="mt-1 line-clamp-1 text-xs text-slate-400">“{rental.message}”</p>
+                      <p className="mt-1 line-clamp-1 text-xs text-muted-foreground">“{rental.message}”</p>
                     )}
                   </div>
                   <RentalStatusBadge status={rental.status} />

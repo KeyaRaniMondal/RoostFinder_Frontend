@@ -35,7 +35,7 @@ export default function LandlordPropertiesPage() {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h1 className="text-2xl font-bold text-slate-900">My properties</h1>
+        <h1 className="text-2xl font-bold text-foreground">My properties</h1>
         <Link href="/dashboard/landlord/properties/new">
           <Button><Plus className="h-4 w-4" /> Add property</Button>
         </Link>
@@ -48,10 +48,10 @@ export default function LandlordPropertiesPage() {
       ) : properties?.length ? (
         <Card>
           <CardContent className="p-0">
-            <div className="divide-y divide-slate-100">
+            <div className="divide-y divide-border">
               {properties.map((property) => (
                 <div key={property.id} className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center">
-                  <div className="relative h-20 w-28 shrink-0 overflow-hidden rounded-lg bg-slate-100">
+                  <div className="relative h-20 w-28 shrink-0 overflow-hidden rounded-lg bg-muted">
                     <Image
                       src={absoluteImageUrl(property.images?.[0]) ?? FALLBACK_IMAGE}
                       alt={property.title}
@@ -64,11 +64,11 @@ export default function LandlordPropertiesPage() {
                   <div className="min-w-0 flex-1">
                     <Link
                       href={`/properties/${property.id}`}
-                      className="line-clamp-1 font-semibold text-slate-900 hover:text-brand-700"
+                      className="line-clamp-1 font-semibold text-foreground hover:text-brand-700"
                     >
                       {property.title}
                     </Link>
-                    <p className="mt-0.5 text-xs text-slate-500">
+                    <p className="mt-0.5 text-xs text-muted-foreground">
                       {PROPERTY_TYPES[property.propertyType]} · {PROPERTY_PURPOSES[property.purpose]} ·{" "}
                       {[property.city, property.area].filter(Boolean).join(", ")}
                     </p>
@@ -78,7 +78,7 @@ export default function LandlordPropertiesPage() {
                         {property.status}
                       </Badge>
                       {property.amenities?.length > 0 && (
-                        <span className="hidden text-xs text-slate-400 sm:inline">
+                        <span className="hidden text-xs text-muted-foreground sm:inline">
                           {property.amenities.length} amenities
                         </span>
                       )}
@@ -94,7 +94,7 @@ export default function LandlordPropertiesPage() {
                     <Button
                       variant="outline"
                       size="sm"
-                      className="text-red-600 hover:bg-red-50 hover:text-red-700"
+                      className="text-red-600 hover:bg-red-50 hover:text-red-700 dark:text-red-400 dark:hover:bg-red-950 dark:hover:text-red-400"
                       onClick={() => handleDelete(property)}
                     >
                       <Trash2 className="h-3.5 w-3.5" /> Delete

@@ -59,13 +59,13 @@ export default function AdminUsersPage() {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h1 className="text-2xl font-bold text-slate-900">User management</h1>
-        <span className="text-sm text-slate-500">{data?.meta.total ?? 0} users</span>
+        <h1 className="text-2xl font-bold text-foreground">User management</h1>
+        <span className="text-sm text-muted-foreground">{data?.meta.total ?? 0} users</span>
       </div>
 
       <div className="grid gap-3 sm:grid-cols-[1fr_180px_180px]">
         <div className="relative">
-          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             placeholder="Search by name or email..."
             className="pl-9"
@@ -103,7 +103,7 @@ export default function AdminUsersPage() {
             <div className="overflow-x-auto">
               <table className="w-full text-left text-sm">
                 <thead>
-                  <tr className="border-b border-slate-200 text-xs uppercase tracking-wide text-slate-500">
+                  <tr className="border-b border-border text-xs uppercase tracking-wide text-muted-foreground">
                     <th className="px-5 py-3 font-semibold">User</th>
                     <th className="px-5 py-3 font-semibold">Role</th>
                     <th className="px-5 py-3 font-semibold">Status</th>
@@ -113,15 +113,15 @@ export default function AdminUsersPage() {
                 </thead>
                 <tbody>
                   {data.data.map((user) => (
-                    <tr key={user.id} className="border-b border-slate-100 last:border-0 hover:bg-slate-50/60">
+                    <tr key={user.id} className="border-b border-border last:border-0 hover:bg-muted/60">
                       <td className="px-5 py-3.5">
                         <div className="flex items-center gap-3">
-                          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand-100 text-sm font-bold text-brand-700">
+                          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand-100 text-sm font-bold text-brand-700 dark:bg-brand-900 dark:text-brand-200">
                             {user.name?.charAt(0)?.toUpperCase()}
                           </span>
                           <div className="min-w-0">
-                            <p className="truncate font-medium text-slate-900">{user.name}</p>
-                            <p className="truncate text-xs text-slate-500">{user.email}</p>
+                            <p className="truncate font-medium text-foreground">{user.name}</p>
+                            <p className="truncate text-xs text-muted-foreground">{user.email}</p>
                           </div>
                         </div>
                       </td>
@@ -131,13 +131,13 @@ export default function AdminUsersPage() {
                       <td className="px-5 py-3.5">
                         <ActiveStatusBadge status={user.activeStatus} />
                       </td>
-                      <td className="px-5 py-3.5 text-slate-600">{formatDate(user.createdAt)}</td>
+                      <td className="px-5 py-3.5 text-muted-foreground">{formatDate(user.createdAt)}</td>
                       <td className="px-5 py-3.5 text-right">
                         {user.activeStatus === "ACTIVE" ? (
                           <Button
                             variant="outline"
                             size="sm"
-                            className="text-red-600 hover:bg-red-50 hover:text-red-700"
+                            className="text-red-600 hover:bg-red-50 hover:text-red-700 dark:text-red-400 dark:hover:bg-red-950 dark:hover:text-red-400"
                             onClick={() => toggleStatus(user.id, user.activeStatus)}
                             loading={updateStatus.isPending}
                           >
@@ -147,7 +147,7 @@ export default function AdminUsersPage() {
                           <Button
                             variant="outline"
                             size="sm"
-                            className="text-emerald-600 hover:bg-emerald-50 hover:text-emerald-700"
+                            className="text-emerald-600 hover:bg-emerald-50 hover:text-emerald-700 dark:text-emerald-400 dark:hover:bg-emerald-950 dark:hover:text-emerald-400"
                             onClick={() => toggleStatus(user.id, user.activeStatus)}
                             loading={updateStatus.isPending}
                           >

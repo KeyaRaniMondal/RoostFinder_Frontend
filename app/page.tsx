@@ -64,13 +64,13 @@ export default async function HomePage() {
             securely online.
           </p>
           <div className="mt-9 w-full max-w-2xl">
-            <form action="/properties" className="flex flex-col gap-2 rounded-2xl bg-white p-2 shadow-2xl sm:flex-row sm:items-center">
+            <form action="/properties" className="flex flex-col gap-2 rounded-2xl bg-card p-2 shadow-2xl sm:flex-row sm:items-center">
               <div className="flex flex-1 items-center gap-2 px-3">
-                <Search className="h-5 w-5 shrink-0 text-slate-400" />
+                <Search className="h-5 w-5 shrink-0 text-muted-foreground" />
                 <input
                   name="searchTerm"
                   placeholder="Search by title, area or district..."
-                  className="h-11 w-full bg-transparent text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none"
+                  className="h-11 w-full bg-transparent text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
                 />
               </div>
               <Button type="submit" size="lg" className="sm:w-auto">
@@ -84,14 +84,14 @@ export default async function HomePage() {
       <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-2xl font-bold text-slate-900">Featured rentals</h2>
-            <p className="mt-1 text-sm text-slate-500">
+            <h2 className="text-2xl font-bold text-foreground">Featured rentals</h2>
+            <p className="mt-1 text-sm text-muted-foreground">
               Popular properties to rent right now
             </p>
           </div>
           <Link
             href="/properties"
-            className="inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium text-brand-600 transition-colors hover:bg-slate-100"
+            className="inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium text-brand-600 transition-colors hover:bg-muted"
           >
             View all <ArrowRight className="h-4 w-4" />
           </Link>
@@ -100,23 +100,23 @@ export default async function HomePage() {
           {featured.length ? (
             <PropertyGrid properties={featured} />
           ) : (
-            <div className="rounded-xl border border-dashed border-slate-300 bg-white p-10 text-center text-sm text-slate-500">
+            <div className="rounded-xl border border-dashed border-border bg-card p-10 text-center text-sm text-muted-foreground">
               No featured properties yet. <Link href="/auth/register?role=Landlord" className="font-medium text-brand-600">Be the first to list one →</Link>
             </div>
           )}
         </div>
       </section>
 
-      <section className="bg-white py-16">
+      <section className="bg-background py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-6 sm:grid-cols-3">
             {perks.map((perk) => (
-              <div key={perk.title} className="rounded-2xl border border-slate-200 p-6">
-                <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-50 text-brand-600">
+              <div key={perk.title} className="rounded-2xl border border-border p-6">
+                <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-50 text-brand-600 dark:bg-brand-900 dark:text-brand-200">
                   <perk.icon className="h-6 w-6" />
                 </span>
-                <h3 className="mt-4 text-base font-semibold text-slate-900">{perk.title}</h3>
-                <p className="mt-1.5 text-sm text-slate-500">{perk.text}</p>
+                <h3 className="mt-4 text-base font-semibold text-foreground">{perk.title}</h3>
+                <p className="mt-1.5 text-sm text-muted-foreground">{perk.text}</p>
               </div>
             ))}
           </div>
@@ -126,7 +126,7 @@ export default async function HomePage() {
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="rounded-3xl bg-gradient-to-br from-slate-900 to-slate-700 px-6 py-12 text-center text-white sm:px-12">
           <h2 className="text-2xl font-bold sm:text-3xl">Own a property? List it today.</h2>
-          <p className="mx-auto mt-3 max-w-xl text-sm text-slate-300 sm:text-base">
+          <p className="mx-auto mt-3 max-w-xl text-sm text-white/80 sm:text-base">
             Create your landlord profile, add your listings, and start receiving rental
             requests — all free.
           </p>

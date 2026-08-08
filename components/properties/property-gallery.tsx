@@ -17,7 +17,7 @@ export function PropertyGallery({ images, title }: { images: string[]; title: st
 
   return (
     <div>
-      <div className="relative aspect-[16/10] overflow-hidden rounded-2xl bg-slate-100">
+      <div className="relative aspect-[16/10] overflow-hidden rounded-2xl bg-muted">
         <Image
           src={absoluteImageUrl(normalized[active]) ?? FALLBACK_IMAGE}
           alt={`${title} — image ${active + 1}`}
@@ -33,14 +33,14 @@ export function PropertyGallery({ images, title }: { images: string[]; title: st
           <>
             <button
               onClick={() => go(-1)}
-              className="absolute left-3 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-slate-700 shadow-lg transition-colors hover:bg-white"
+              className="absolute left-3 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-background/90 text-foreground shadow-lg transition-colors hover:bg-background"
               aria-label="Previous image"
             >
               <ChevronLeft className="h-5 w-5" />
             </button>
             <button
               onClick={() => go(1)}
-              className="absolute right-3 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-slate-700 shadow-lg transition-colors hover:bg-white"
+              className="absolute right-3 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-background/90 text-foreground shadow-lg transition-colors hover:bg-background"
               aria-label="Next image"
             >
               <ChevronRight className="h-5 w-5" />
@@ -65,7 +65,7 @@ export function PropertyGallery({ images, title }: { images: string[]; title: st
               onClick={() => setActive(index)}
               className={cn(
                 "relative aspect-[4/3] overflow-hidden rounded-lg border-2 transition-colors",
-                active === index ? "border-brand-600" : "border-transparent hover:border-slate-300"
+                active === index ? "border-brand-600" : "border-transparent hover:border-border"
               )}
             >
               <Image

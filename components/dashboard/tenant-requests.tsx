@@ -33,10 +33,10 @@ function TenantRequestRow({
   };
 
   return (
-    <div className="flex flex-col gap-4 border-b border-slate-100 py-4 last:border-0 sm:flex-row sm:items-center">
+    <div className="flex flex-col gap-4 border-b border-border py-4 last:border-0 sm:flex-row sm:items-center">
       {property && (
         <Link href={`/properties/${property.id}`} className="shrink-0">
-          <div className="relative h-16 w-24 overflow-hidden rounded-lg bg-slate-100">
+          <div className="relative h-16 w-24 overflow-hidden rounded-lg bg-muted">
             <Image
               src={image}
               alt={property.title}
@@ -51,18 +51,18 @@ function TenantRequestRow({
       <div className="min-w-0 flex-1">
         <Link
           href={`/properties/${property?.id ?? ""}`}
-          className="line-clamp-1 text-sm font-semibold text-slate-900 hover:text-brand-700"
+          className="line-clamp-1 text-sm font-semibold text-foreground hover:text-brand-700"
         >
           {property?.title ?? "Property"}
         </Link>
-        <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-slate-500">
+        <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
           <span className="flex items-center gap-2">
             <RentalStatusBadge status={display} />
             {request.payment && <PaymentStatusBadge status={request.payment.status} />}
           </span>
           <span>Requested {formatDate(request.createdAt)}</span>
           {request.moveInDate && <span>Move-in {formatDate(request.moveInDate)}</span>}
-          {property && <span className="font-semibold text-slate-700">{formatPrice(property.price)}</span>}
+          {property && <span className="font-semibold text-foreground">{formatPrice(property.price)}</span>}
         </div>
       </div>
       <div className="flex shrink-0 items-center gap-2">
@@ -73,7 +73,7 @@ function TenantRequestRow({
         )}
         {(display === "ACTIVE" || display === "COMPLETED") && (
           <Button size="sm" variant="outline" onClick={() => onReview(request)}>
-            <Star className="h-3.5 w-3.5 text-amber-500" /> Leave Review
+            <Star className="h-3.5 w-3.5 text-amber-500 dark:text-amber-400" /> Leave Review
           </Button>
         )}
       </div>
@@ -115,7 +115,7 @@ export function TenantRequestsList({
   }
 
   return (
-    <div className="divide-y divide-slate-100">
+    <div className="divide-y divide-border">
       {requests.map((request) => (
         <TenantRequestRow
           key={request.id}

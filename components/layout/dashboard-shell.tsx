@@ -76,7 +76,7 @@ export function DashboardShell({
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       <div className="grid gap-8 lg:grid-cols-[230px_1fr]">
         <aside className="lg:sticky lg:top-20 lg:self-start">
-          <nav className="flex gap-1 overflow-x-auto rounded-xl border border-slate-200 bg-white p-2 lg:flex-col">
+          <nav className="flex gap-1 overflow-x-auto rounded-xl border border-border bg-card p-2 lg:flex-col">
             {navItems.map((item) => {
               const active = item.exact
                 ? pathname === item.href
@@ -89,7 +89,7 @@ export function DashboardShell({
                     "flex shrink-0 items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
                     active
                       ? "bg-brand-600 text-white"
-                      : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+                      : "text-muted-foreground hover:bg-muted hover:text-foreground"
                   )}
                 >
                   <item.icon className="h-4 w-4 shrink-0" />
@@ -97,16 +97,16 @@ export function DashboardShell({
                 </Link>
               );
             })}
-            <div className="mt-auto hidden border-t border-slate-100 pt-2 lg:block">
+            <div className="mt-auto hidden border-t border-border pt-2 lg:block">
               <Link
                 href="/properties"
-                className="flex items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-100"
+                className="flex items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
               >
                 <Search className="h-4 w-4" /> Browse properties
               </Link>
               <button
                 onClick={logout}
-                className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm font-medium text-red-600 transition-colors hover:bg-red-50"
+                className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm font-medium text-red-600 transition-colors hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950"
               >
                 <LogOut className="h-4 w-4" /> Sign out
               </button>

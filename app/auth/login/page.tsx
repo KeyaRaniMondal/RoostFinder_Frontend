@@ -48,13 +48,13 @@ function LoginForm() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-slate-900">Log in</h1>
-      <p className="mt-1 text-sm text-slate-500">
+      <h1 className="text-2xl font-bold text-foreground">Log in</h1>
+      <p className="mt-1 text-sm text-muted-foreground">
         Welcome back! Log in to manage your rentals and listings.
       </p>
 
       {serverError && (
-        <div className="mt-5 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">
+        <div className="mt-5 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700 dark:border-red-900 dark:bg-red-950 dark:text-red-300">
           {serverError}
         </div>
       )}
@@ -93,7 +93,7 @@ function LoginForm() {
         </Button>
       </form>
 
-      <p className="mt-6 text-center text-sm text-slate-500">
+      <p className="mt-6 text-center text-sm text-muted-foreground">
         Don&apos;t have an account?{" "}
         <Link href="/auth/register" className="font-medium text-brand-600 hover:text-brand-700">
           Sign up for free
@@ -105,7 +105,7 @@ function LoginForm() {
 
 export default function LoginPage() {
   return (
-    <Suspense fallback={<p className="text-sm text-slate-400">Loading...</p>}>
+    <Suspense fallback={<p className="text-sm text-muted-foreground">Loading...</p>}>
       <LoginForm />
     </Suspense>
   );
