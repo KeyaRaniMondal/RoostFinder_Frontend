@@ -25,6 +25,7 @@ export function Navbar() {
     { href: "/properties", label: "Browse Properties" },
     { href: "/contact", label: "Contact" },
     { href: "/privacy", label: "Privacy Policy" },
+    { href: "/terms", label: "Terms of Service" },
   ];
 
   const navLink = (href: string, label: string) => (

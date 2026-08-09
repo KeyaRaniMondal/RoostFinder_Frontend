@@ -7,6 +7,7 @@ import { PropertyGrid } from "@/components/properties/property-grid";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { PROPERTY_TYPES } from "@/lib/constants";
+import FrequentlyAsked from "@/components/faq/faq";
 
 const heroImage =
   "https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=1800&q=80";
@@ -216,6 +217,7 @@ export default async function HomePage() {
         </div>
       </section>
 
+<FrequentlyAsked />
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="rounded-3xl bg-gradient-to-br from-slate-900 to-slate-700 px-6 py-12 text-center text-white sm:px-12">
           <h2 className="text-2xl font-bold sm:text-3xl">Own a property? List it today.</h2>
