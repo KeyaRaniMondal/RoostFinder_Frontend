@@ -23,6 +23,8 @@ export function Navbar() {
   const links = [
     { href: "/", label: "Home" },
     { href: "/properties", label: "Browse Properties" },
+    { href: "/contact", label: "Contact" },
+    { href: "/privacy", label: "Privacy Policy" },
   ];
 
   const navLink = (href: string, label: string) => (
