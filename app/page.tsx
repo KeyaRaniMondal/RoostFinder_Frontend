@@ -1,11 +1,12 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, Building2, KeyRound, ShieldCheck, Search } from "lucide-react";
+import { ArrowRight, Building2, KeyRound, ShieldCheck, Search, Home, Castle, Briefcase, LandPlot, Store } from "lucide-react";
 import { serverFetch } from "@/lib/api";
-import { Paginated, Property } from "@/types";
+import { Paginated, Property, PropertyType } from "@/types";
 import { PropertyGrid } from "@/components/properties/property-grid";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { PROPERTY_TYPES } from "@/lib/constants";
 
 const heroImage =
   "https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=1800&q=80";
@@ -39,8 +40,58 @@ async function getFeaturedProperties() {
   }
 }
 
+const propertyTypeIcons: Record<PropertyType, typeof Home> = {
+  APARTMENT: Building2,
+  HOUSE: Home,
+  VILLA: Castle,
+  OFFICE: Briefcase,
+  LAND: LandPlot,
+  SHOP: Store,
+};
+
+const PROPERTY_TYPE_ORDER: PropertyType[] = [
+  "APARTMENT",
+  "HOUSE",
+  "VILLA",
+  "OFFICE",
+  "SHOP",
+  "LAND",
+];
+
+
+async function getCategories(): Promise<PropertyType[]> {
+  try {
+    const categories = await serverFetch<PropertyType[]>("/api/categories");
+    return Array.isArray(categories) ? categories : [];
+  } catch {
+    return [];
+  }
+}
+
+async function getRentTypeCounts(
+  categories: PropertyType[]
+): Promise<Array<{ type: PropertyType; count: number }>> {
+  try {
+    const types = categories.length > 0 ? categories : PROPERTY_TYPE_ORDER;
+    const results = await Promise.all(
+      types.map(async (type) => {
+        const data = await serverFetch<Paginated<Property>>(
+          `/api/properties?purpose=RENT&propertyType=${type}&limit=1`
+        );
+        return { type, count: data.meta?.total ?? 0 };
+      })
+    );
+    return results;
+  } catch {
+    return [];
+  }
+}
+
 export default async function HomePage() {
   const featured = await getFeaturedProperties();
+  const categories = await getCategories();
+  const typeCounts = await getRentTypeCounts(categories);
+  const typesWithRentals = typeCounts.filter((t) => t.count > 0);
 
   return (
     <div>
@@ -80,7 +131,49 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
-
+      {typesWithRentals.length > 0 && (
+        <section className=" mx-auto max-w-7xl px-4 py-16 mt-10 sm:px-6 lg:px-8 ">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-2xl font-bold text-foreground">Types of properties</h2>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Explore the different types of properties we have for rent
+              </p>
+            </div>
+            <Link
+              href="/properties?purpose=RENT"
+              className="inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium text-brand-600  transition-colors hover:bg-slate-100"
+            >
+              Browse all rentals <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3  ">
+            {typesWithRentals.map(({ type, count }) => {
+              const Icon = propertyTypeIcons[type];
+              return (
+                <Link
+                  key={type}
+                  href={`/properties?purpose=RENT&propertyType=${type}`}
+                  className="group flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-5 transition-all hover:border-brand-300 hover:shadow-card"
+                >
+                  <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-600 transition-colors group-hover:bg-brand-600 group-hover:text-white ">
+                    <Icon className="h-6 w-6" />
+                  </span>
+                  <div className="min-w-0 flex-1 ">
+                    <h3 className="text-base font-semibold text-slate-900">
+                      {PROPERTY_TYPES[type]}
+                    </h3>
+                    <p className="text-sm text-muted-foreground">
+                      {count} {count === 1 ? "listing" : "listings"} for rent
+                    </p>
+                  </div>
+                  <ArrowRight className="h-4 w-4 shrink-0 text-slate-300 transition-all group-hover:translate-x-0.5 group-hover:text-brand-600" />
+                </Link>
+              );
+            })}
+          </div>
+        </section>
+      )}
       <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
           <div>

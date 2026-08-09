@@ -14,6 +14,22 @@ function filterByAmenities(properties: any[], amenities: PropertyAmenity[]) {
   return properties.filter((p) => amenities.every((a) => (p.amenities ?? []).includes(a)));
 }
 
+function filterByPriceRange(properties: any[], minPrice: string, maxPrice: string) {
+  const min = minPrice !== "" ? Number(minPrice) : undefined;
+  const max = maxPrice !== "" ? Number(maxPrice) : undefined;
+
+  return properties.filter((property) => {
+    if (typeof property.price !== "number") return true;
+    if (min !== undefined && !Number.isNaN(min) && property.price < min) return false;
+    if (max !== undefined && !Number.isNaN(max) && property.price > max) return false;
+    return true;
+  });
+}
+
+function sortByPrice(properties: any[]) {
+  return [...properties].sort((a, b) => a.price - b.price);
+}
+
 export default function PropertiesPage() {
   const [filters, setFilters] = useState<PropertyFilterState>(defaultFilters);
   const [page, setPage] = useState(1);
@@ -29,11 +45,14 @@ export default function PropertiesPage() {
   });
 
   const all = data?.data ?? [];
-  const filtered = filterByAmenities(all, filters.amenities);
-const totalPages = Math.max(
-  1,
-  Math.ceil((data?.meta?.total ?? 0) / 9)
-);
+  const priced = filterByPriceRange(all, filters.minPrice, filters.maxPrice);
+  const filtered = filterByAmenities(priced, filters.amenities);
+  const sorted = (filters.minPrice !== "" || filters.maxPrice !== "") ? sortByPrice(filtered) : filtered;
+
+  const totalPages = Math.max(
+    1,
+    Math.ceil((data?.meta?.total ?? 0) / 9)
+  );
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
@@ -65,7 +84,7 @@ const totalPages = Math.max(
             />
           ) : filtered.length ? (
             <>
-              <PropertyGrid properties={filtered} />
+              <PropertyGrid properties={sorted} />
               {filters.amenities.length > 0 && data && filtered.length < data.data.length && (
                 <p className="mt-4 text-center text-xs text-muted-foreground">
                   Amenity filter applied — showing {filtered.length} of {data.meta.total} total

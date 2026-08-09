@@ -17,8 +17,8 @@ export interface PropertyFilters {
 export function toQueryString(filters: PropertyFilters) {
   const params = new URLSearchParams();
   if (filters.searchTerm) params.set("searchTerm", filters.searchTerm);
-  if (filters.minPrice) params.set("minPrice", filters.minPrice);
-  if (filters.maxPrice) params.set("maxPrice", filters.maxPrice);
+  if (filters.minPrice !== undefined && filters.minPrice !== "") params.set("minPrice", filters.minPrice);
+  if (filters.maxPrice !== undefined && filters.maxPrice !== "") params.set("maxPrice", filters.maxPrice);
   if (filters.propertyType) params.set("propertyType", filters.propertyType);
   if (filters.purpose) params.set("purpose", filters.purpose);
   params.set("page", String(filters.page ?? 1));
