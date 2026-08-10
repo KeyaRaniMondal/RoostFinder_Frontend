@@ -15,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { FormError } from "@/components/ui/form-error";
+import { GoogleButton } from "@/components/ui/googleButton";
 import { cn } from "@/lib/utils";
 
 const roleIcons: Record<Role, typeof Home> = {
@@ -74,13 +75,13 @@ function RegisterForm() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-foreground">Create your account</h1>
-      <p className="mt-1 text-sm text-muted-foreground">
+      <h1 className="text-2xl font-bold text-slate-900">Create your account</h1>
+      <p className="mt-1 text-sm text-slate-500">
         Choose your role to get started.
       </p>
 
       {serverError && (
-        <div className="mt-5 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700 dark:border-red-900 dark:bg-red-950 dark:text-red-300">
+        <div className="mt-5 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">
           {serverError}
         </div>
       )}
@@ -100,19 +101,19 @@ function RegisterForm() {
                   className={cn(
                     "flex flex-col items-center gap-2 rounded-xl border-2 px-3 py-4 text-center transition-colors",
                     active
-                      ? "border-brand-600 bg-brand-50 dark:bg-brand-900"
-                      : "border-border bg-card hover:border-border"
+                      ? "border-brand-600 bg-brand-50"
+                      : "border-slate-200 bg-white hover:border-slate-300"
                   )}
                 >
                   <span
                     className={cn(
                       "flex h-10 w-10 items-center justify-center rounded-full",
-                      active ? "bg-brand-600 text-white" : "bg-muted text-muted-foreground"
+                      active ? "bg-brand-600 text-white" : "bg-slate-100 text-slate-500"
                     )}
                   >
                     <Icon className="h-5 w-5" />
                   </span>
-                  <span className={cn("text-sm font-semibold", active ? "text-brand-800" : "text-foreground")}>
+                  <span className={cn("text-sm font-semibold", active ? "text-brand-800" : "text-slate-700")}>
                     {ROLES[role].label}
                   </span>
                   {active && <Check className="h-4 w-4 text-brand-600" />}
@@ -177,7 +178,15 @@ function RegisterForm() {
         </Button>
       </form>
 
-      <p className="mt-6 text-center text-sm text-muted-foreground">
+      <div className="mt-6 flex items-center gap-3">
+        <span className="h-px flex-1 bg-slate-200" />
+        <span className="text-xs font-medium uppercase tracking-wide text-slate-400">or</span>
+        <span className="h-px flex-1 bg-slate-200" />
+      </div>
+
+      <GoogleButton className="mt-4" />
+
+      <p className="mt-6 text-center text-sm text-slate-500">
         Already have an account?{" "}
         <Link href="/auth/login" className="font-medium text-brand-600 hover:text-brand-700">
           Log in
@@ -189,7 +198,7 @@ function RegisterForm() {
 
 export default function RegisterPage() {
   return (
-    <Suspense fallback={<p className="text-sm text-muted-foreground">Loading...</p>}>
+    <Suspense fallback={<p className="text-sm text-slate-400">Loading...</p>}>
       <RegisterForm />
     </Suspense>
   );

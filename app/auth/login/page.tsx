@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { FormError } from "@/components/ui/form-error";
+import { GoogleButton } from "@/components/ui/googleButton";
 
 function LoginForm() {
   const router = useRouter();
@@ -48,13 +49,13 @@ function LoginForm() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-foreground">Log in</h1>
-      <p className="mt-1 text-sm text-muted-foreground">
+      <h1 className="text-2xl font-bold text-slate-900">Log in</h1>
+      <p className="mt-1 text-sm text-slate-500">
         Welcome back! Log in to manage your rentals and listings.
       </p>
 
       {serverError && (
-        <div className="mt-5 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700 dark:border-red-900 dark:bg-red-950 dark:text-red-300">
+        <div className="mt-5 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">
           {serverError}
         </div>
       )}
@@ -93,7 +94,15 @@ function LoginForm() {
         </Button>
       </form>
 
-      <p className="mt-6 text-center text-sm text-muted-foreground">
+      <div className="mt-6 flex items-center gap-3">
+        <span className="h-px flex-1 bg-slate-200" />
+        <span className="text-xs font-medium uppercase tracking-wide text-slate-400">or</span>
+        <span className="h-px flex-1 bg-slate-200" />
+      </div>
+
+      <GoogleButton className="mt-4" />
+
+      <p className="mt-6 text-center text-sm text-slate-500">
         Don&apos;t have an account?{" "}
         <Link href="/auth/register" className="font-medium text-brand-600 hover:text-brand-700">
           Sign up for free
@@ -105,7 +114,7 @@ function LoginForm() {
 
 export default function LoginPage() {
   return (
-    <Suspense fallback={<p className="text-sm text-muted-foreground">Loading...</p>}>
+    <Suspense fallback={<p className="text-sm text-slate-400">Loading...</p>}>
       <LoginForm />
     </Suspense>
   );
