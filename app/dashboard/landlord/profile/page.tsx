@@ -74,12 +74,18 @@ export default function LandlordProfilePage() {
 
   const onSubmit = handleSubmit(async (values) => {
     setServerError(null);
+    const payload = {
+      ...values,
+      dateOfBirth: values.dateOfBirth?.trim()
+        ? new Date(values.dateOfBirth).toISOString()
+        : undefined,
+    };
     try {
       if (isNew) {
-        await createProfile.mutateAsync(values);
+        await createProfile.mutateAsync(payload);
         toast.success("Landlord profile created");
       } else {
-        await updateProfile.mutateAsync(values);
+        await updateProfile.mutateAsync(payload);
         toast.success("Profile updated");
       }
       router.refresh();

@@ -6,7 +6,12 @@ export const landlordProfileSchema = z.object({
     .min(7, "Enter a valid phone number")
     .max(20, "Phone number is too long"),
   address: z.string().max(300).optional(),
-  dateOfBirth: z.string().optional(),
+  dateOfBirth: z
+    .string()
+    .optional()
+    .refine((value) => !value || /^\d{4}-\d{2}-\d{2}$/.test(value), {
+      message: "Enter a valid date",
+    }),
   occupation: z.string().max(100).optional(),
   companyName: z.string().max(120).optional(),
   nidNumber: z.string().max(40).optional(),
