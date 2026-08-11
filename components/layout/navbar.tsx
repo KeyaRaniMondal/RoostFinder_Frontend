@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Building2, ChevronDown, Home, LogOut, Menu, X } from "lucide-react";
+import { Building2, ChevronDown, Home, LogOut, Menu, UserCircle2, X } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { cn } from "@/lib/utils";
 import { DASHBOARD_ROLE_BASE_URL, ROLES } from "@/lib/constants";
@@ -70,7 +70,7 @@ export function Navbar() {
                 <span className="flex h-6 w-6 items-center justify-center rounded-full bg-brand-100 text-xs font-bold text-brand-700 dark:bg-brand-900 dark:text-brand-200">
                   {user.name?.charAt(0).toUpperCase()}
                 </span>
-                <span className="max-w-[120px] truncate">{user.name}</span>
+                <span className="max-w-30 truncate">{user.name}</span>
                 <ChevronDown className="h-4 w-4 text-muted-foreground" />
               </button>
               {menuOpen && (
@@ -91,6 +91,13 @@ export function Navbar() {
                       <Home className="h-4 w-4" /> Go to dashboard
                     </Link>
                   )}
+                  <Link
+                    href="/dashboard/profile"
+                    onClick={() => setMenuOpen(false)}
+                    className="flex items-center gap-2 px-4 py-2.5 text-sm text-foreground hover:bg-muted"
+                  >
+                    <UserCircle2 className="h-4 w-4" /> My profile
+                  </Link>
                   <button
                     onClick={() => {
                       setMenuOpen(false);
@@ -137,6 +144,15 @@ export function Navbar() {
                 <span className="flex-1 truncate text-sm font-medium text-foreground">
                   Signed in as {user.name}
                 </span>
+                <Link
+                  href="/dashboard/profile"
+                  className="flex-1"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  <Button variant="outline" size="sm" className="w-full">
+                    My profile
+                  </Button>
+                </Link>
                 <Button
                   variant="outline"
                   size="sm"

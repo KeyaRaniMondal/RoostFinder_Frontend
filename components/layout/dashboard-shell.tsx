@@ -29,18 +29,21 @@ interface NavItem {
 const roleNav: Record<Role, NavItem[]> = {
   Tenant: [
     { href: "/dashboard/tenant", label: "Overview", icon: LayoutDashboard, exact: true },
+    { href: "/dashboard/profile", label: "My Profile", icon: UserIcon },
     { href: "/dashboard/tenant/requests", label: "My Requests", icon: Inbox },
     { href: "/dashboard/tenant/payments", label: "Payments", icon: CreditCard },
   ],
   Landlord: [
     { href: "/dashboard/landlord", label: "Overview", icon: LayoutDashboard, exact: true },
+    { href: "/dashboard/profile", label: "My Profile", icon: UserIcon },
     { href: "/dashboard/landlord/properties", label: "My Properties", icon: Building2 },
     { href: "/dashboard/landlord/properties/new", label: "Add Property", icon: Building2 },
     { href: "/dashboard/landlord/requests", label: "Requests", icon: Inbox },
-    { href: "/dashboard/landlord/profile", label: "Profile", icon: UserIcon },
+    { href: "/dashboard/landlord/profile", label: "Business Profile", icon: UserIcon },
   ],
   Admin: [
     { href: "/dashboard/admin", label: "Overview", icon: LayoutDashboard, exact: true },
+    { href: "/dashboard/profile", label: "My Profile", icon: UserIcon },
     { href: "/dashboard/admin/users", label: "Users", icon: Users },
     { href: "/dashboard/admin/properties", label: "Properties", icon: Building2 },
     { href: "/dashboard/admin/rentals", label: "Rental Requests", icon: ClipboardList },
