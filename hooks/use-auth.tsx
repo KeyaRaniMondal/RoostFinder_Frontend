@@ -194,10 +194,13 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
   ReactNode,
 } from "react";
 import { useRouter } from "next/navigation";
+import { signOut, useSession } from "next-auth/react";
+import { toast } from "sonner";
 import { api } from "@/lib/api";
 import {
   clearAuth,
@@ -209,6 +212,7 @@ import {
   writeAuthCookie,
   USER_KEY,
 } from "@/lib/token";
+import { DASHBOARD_ROLE_BASE_URL } from "@/lib/constants";
 import { AuthTokens, JwtPayload, User } from "@/types";
 
 interface AuthContextValue {
@@ -276,6 +280,7 @@ async function fetchCurrentProfile() {
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const router = useRouter();
+  const { data: session, status: sessionStatus } = useSession();
   const [user, setUser] = useState<JwtPayload | null>(null);
   const [me, setMeState] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
@@ -326,6 +331,43 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setStatus("authenticated");
     refreshMe();
   }, [refreshMe]);
+
+  // Bridge a fresh NextAuth (Google) session into the backend JWT auth system.
+  const exchangingGoogle = useRef(false);
+
+  useEffect(() => {
+    if (sessionStatus !== "authenticated") return;
+    const sessionUser = session?.user;
+    if (!sessionUser?.email) return;
+    if (getAccessToken()) return;
+    if (exchangingGoogle.current) return;
+    exchangingGoogle.current = true;
+
+    (async () => {
+      try {
+        const tokens = await api.post<AuthTokens>("/api/auth/google", {
+          name: sessionUser.name ?? undefined,
+          email: sessionUser.email,
+          emailVerified: true,
+          image: sessionUser.image ?? undefined,
+        });
+        const payload = parseAuthToken(tokens.accessToken);
+        applyAuth(tokens);
+        toast.success("Welcome to RoostFinder!");
+        router.push(DASHBOARD_ROLE_BASE_URL[payload?.role ?? "Tenant"]);
+      } catch (error) {
+        clearAuth();
+        setUser(null);
+        setMeState(null);
+        setToken(null);
+        setStatus("unauthenticated");
+        toast.error((error as Error).message || "Google sign-in failed");
+      } finally {
+        await signOut({ redirect: false });
+        exchangingGoogle.current = false;
+      }
+    })();
+  }, [sessionStatus, session, router, applyAuth]);
 
   const login = useCallback(
     async (email: string, password: string) => {

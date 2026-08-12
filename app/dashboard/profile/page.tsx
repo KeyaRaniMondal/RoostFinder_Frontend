@@ -74,8 +74,8 @@ export default function ProfilePage() {
       </Link>
 
       <div className="mt-4">
-        <h1 className="text-2xl font-bold text-slate-900">My profile</h1>
-        <p className="mt-1 text-sm text-slate-500">
+        <h1 className="text-2xl font-bold text-foreground">My profile</h1>
+        <p className="mt-1 text-sm text-muted-foreground">
           View and update your personal information.
         </p>
       </div>
@@ -144,8 +144,8 @@ export default function ProfilePage() {
                   {user.name?.charAt(0)?.toUpperCase() ?? "U"}
                 </span>
               )}
-              <p className="mt-4 text-lg font-bold text-slate-900">{user.name}</p>
-              <p className="text-sm text-slate-500">{user.email}</p>
+              <p className="mt-4 text-lg font-bold text-foreground">{user.name}</p>
+              <p className="text-sm text-muted-foreground">{user.email}</p>
               <Badge className="mt-3 bg-brand-50 text-brand-700">{ROLES[user.role].label}</Badge>
             </CardContent>
           </Card>
@@ -156,14 +156,14 @@ export default function ProfilePage() {
             </CardHeader>
             <CardContent className="space-y-3 text-sm">
               <div className="flex items-center justify-between">
-                <span className="text-slate-500">Status</span>
-                <span className="font-medium text-slate-900">
+                <span className="text-muted-foreground">Status</span>
+                <span className="font-medium text-foreground">
                   {me ? ACTIVE_STATUS_LABELS[me.activeStatus] : "—"}
                 </span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-slate-500">Member since</span>
-                <span className="font-medium text-slate-900">{formatDate(me?.createdAt)}</span>
+                <span className="text-muted-foreground">Member since</span>
+                <span className="font-medium text-foreground">{formatDate(me?.createdAt)}</span>
               </div>
             </CardContent>
           </Card>
