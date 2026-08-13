@@ -23,7 +23,7 @@ export function Navbar() {
   const links = [
     { href: "/", label: "Home" },
     { href: "/properties", label: "Browse Properties" },
-    { href: "/contact", label: "Contact" },
+    { href: "/about", label: "About" },
     { href: "/privacy", label: "Privacy Policy" },
     { href: "/terms", label: "Terms of Service" },
   ];

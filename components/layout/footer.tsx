@@ -8,6 +8,9 @@ const columns = [
       { href: "/properties", label: "All properties" },
       { href: "/properties?purpose=RENT", label: "Rentals" },
       { href: "/properties?purpose=SALE", label: "Sales" },
+      { href: "/about", label: "About us" },
+      { href: "/privacy", label: "Privacy Policy" },
+      { href: "/terms", label: "Terms of Service" },
     ],
   },
   {
@@ -42,6 +45,9 @@ export function Footer() {
             </div>
             <p className="mt-3 max-w-xs text-sm text-muted-foreground">
               Find your next home or list your property. Rent with confidence.
+            </p>
+            <p className="mt-3 max-w-xs text-sm text-foreground">
+              Contact us: +880 123-XXXXXXX
             </p>
           </div>
           {columns.map((col) => (
