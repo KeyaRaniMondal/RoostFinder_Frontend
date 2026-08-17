@@ -65,7 +65,7 @@ export default function ProfilePage() {
     try {
       const result = await uploadProfileImage(file);
       if (me) {
-        setMe({ ...me, imageUrl: result.imageUrl } as any);
+        setMe({ ...me, imageUrl: result.imageUrl });
       }
       reset((prev) => ({ ...prev, profilePhoto: result.imageUrl }));
       toast.success("Profile photo updated");

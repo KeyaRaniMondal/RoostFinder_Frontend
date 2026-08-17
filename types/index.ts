@@ -70,6 +70,8 @@ export interface User {
   email: string;
   role: Role;
   activeStatus: ActiveStatus;
+  imageUrl?: string | null;
+  imagePublicId?: string | null;
   createdAt: string;
   updatedAt: string;
   profiel?: Profile | null;
