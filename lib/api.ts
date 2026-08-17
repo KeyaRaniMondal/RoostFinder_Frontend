@@ -65,6 +65,54 @@ export const api = {
   delete: <T>(path: string) => apiRequest<T>(path, { method: "DELETE" }),
 };
 
+export interface UploadedImage {
+  url: string;
+  publicId: string;
+}
+
+/**
+ * Uploads image files to Cloudinary through the backend /api/uploads endpoint.
+ * Sends multipart/form-data (no explicit Content-Type so the browser sets the
+ * boundary) and keeps the Authorization header for the backend auth middleware.
+ */
+export async function uploadImages(files: File[]): Promise<UploadedImage[]> {
+  if (files.length === 0) return [];
+
+  const token = getAccessToken();
+  const headers: Record<string, string> = {};
+  if (token) headers["Authorization"] = `Bearer ${token}`;
+
+  const formData = new FormData();
+  files.forEach((file) => formData.append("images", file));
+
+  const res = await fetch("/api/uploads", {
+    method: "POST",
+    body: formData,
+    headers,
+  });
+
+  const parsed = await parseResponse(res) as { images: UploadedImage[] };
+  return parsed.images ?? [];
+}
+
+export async function uploadProfileImage(file: File): Promise<{ imageUrl: string; imagePublicId: string }> {
+  const token = getAccessToken();
+  const headers: Record<string, string> = {};
+  if (token) headers["Authorization"] = `Bearer ${token}`;
+
+  const formData = new FormData();
+  formData.append("profileImage", file);
+
+  const res = await fetch("/api/auth/profile-image", {
+    method: "PATCH",
+    body: formData,
+    headers,
+  });
+
+  const parsed = await parseResponse(res) as { user: { imageUrl: string; imagePublicId: string } };
+  return parsed.user ?? parsed as any;
+}
+
 /**
  * Server-component fetcher. Talks straight to the backend (server-to-server,
  * no CORS involved) for public data.

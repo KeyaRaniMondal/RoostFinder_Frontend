@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Camera, Loader2 } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -11,6 +11,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { profileSchema, ProfileFormValues } from "@/schemas/profile";
 import { ACTIVE_STATUS_LABELS, DASHBOARD_ROLE_BASE_URL, ROLES } from "@/lib/constants";
 import { formatDate } from "@/lib/utils";
+import { uploadProfileImage } from "@/lib/api";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -20,7 +21,9 @@ import { FormError } from "@/components/ui/form-error";
 import { Badge } from "@/components/ui/badge";
 
 export default function ProfilePage() {
-  const { user, me, updateProfile } = useAuth();
+  const { user, me, updateProfile, setMe } = useAuth();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState(false);
 
   const {
     register,
@@ -49,7 +52,30 @@ export default function ProfilePage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.id, me?.profiel?.profilePhoto, me?.profiel?.bio]);
 
-  const avatarUrl = me?.profiel?.profilePhoto || "";
+  const avatarUrl = me?.imageUrl || me?.profiel?.profilePhoto || "";
+
+  const handleAvatarUpload = async (files: FileList | null) => {
+    if (!files || files.length === 0) return;
+    const file = files[0];
+    if (!file.type.startsWith("image/")) {
+      toast.error("Please select an image file");
+      return;
+    }
+    setUploading(true);
+    try {
+      const result = await uploadProfileImage(file);
+      if (me) {
+        setMe({ ...me, imageUrl: result.imageUrl } as any);
+      }
+      reset((prev) => ({ ...prev, profilePhoto: result.imageUrl }));
+      toast.success("Profile photo updated");
+    } catch (error) {
+      toast.error("Upload failed", { description: (error as Error).message });
+    } finally {
+      setUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
+  };
 
   const onSubmit = handleSubmit(async (values) => {
     try {
@@ -131,19 +157,41 @@ export default function ProfilePage() {
         <div className="space-y-6">
           <Card>
             <CardContent className="flex flex-col items-center py-8 text-center">
-              {avatarUrl ? (
-                <Image
-                  src={avatarUrl}
-                  alt={user.name ?? "Profile"}
-                  width={80}
-                  height={80}
-                  className="h-20 w-20 rounded-full object-cover ring-2 ring-brand-100"
+              <div className="group relative">
+                {avatarUrl ? (
+                  <Image
+                    src={avatarUrl}
+                    alt={user.name ?? "Profile"}
+                    width={80}
+                    height={80}
+                    className="h-20 w-20 rounded-full object-cover ring-2 ring-brand-100"
+                  />
+                ) : (
+                  <span className="flex h-20 w-20 items-center justify-center rounded-full bg-brand-100 text-2xl font-bold text-brand-700">
+                    {user.name?.charAt(0)?.toUpperCase() ?? "U"}
+                  </span>
+                )}
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={(e) => handleAvatarUpload(e.target.files)}
                 />
-              ) : (
-                <span className="flex h-20 w-20 items-center justify-center rounded-full bg-brand-100 text-2xl font-bold text-brand-700">
-                  {user.name?.charAt(0)?.toUpperCase() ?? "U"}
-                </span>
-              )}
+                <button
+                  type="button"
+                  disabled={uploading}
+                  onClick={() => fileInputRef.current?.click()}
+                  className="absolute bottom-0 right-0 flex h-7 w-7 items-center justify-center rounded-full bg-brand-600 text-white shadow-md transition-colors hover:bg-brand-700 disabled:opacity-50"
+                  aria-label="Upload profile photo"
+                >
+                  {uploading ? (
+                    <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                  ) : (
+                    <Camera className="h-3.5 w-3.5" />
+                  )}
+                </button>
+              </div>
               <p className="mt-4 text-lg font-bold text-foreground">{user.name}</p>
               <p className="text-sm text-muted-foreground">{user.email}</p>
               <Badge className="mt-3 bg-brand-50 text-brand-700">{ROLES[user.role].label}</Badge>

@@ -1,9 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm, Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Plus, Trash2 } from "lucide-react";
+import { Link2, Upload, X, Loader2, ImageIcon } from "lucide-react";
+import { toast } from "sonner";
+import { uploadImages } from "@/lib/api";
 import { propertySchema, PropertyFormValues } from "@/schemas/property";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -48,13 +50,42 @@ export function PropertyForm({
     setValue("images", imageInputs, { shouldValidate: true, shouldDirty: true });
   }, [imageInputs, setValue]);
 
-  const updateImage = (index: number, value: string) =>
-    setImageInputs((prev) => prev.map((v, i) => (i === index ? value : v)));
-
-  const addImage = () => setImageInputs((prev) => [...prev, ""]);
-
   const removeImage = (index: number) =>
     setImageInputs((prev) => prev.filter((_, i) => i !== index));
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState(false);
+  const [urlInput, setUrlInput] = useState("");
+
+  const handleFiles = async (files: FileList | null) => {
+    if (!files || files.length === 0) return;
+
+    setUploading(true);
+    try {
+      const uploaded = await uploadImages(Array.from(files));
+      setImageInputs((prev) => {
+        const next = [...prev.filter((v) => v.trim() !== ""), ...uploaded.map((u) => u.url)];
+        return next.slice(0, 12);
+      });
+      toast.success(`${uploaded.length} image${uploaded.length > 1 ? "s" : ""} uploaded`);
+    } catch (error) {
+      toast.error("Upload failed", { description: (error as Error).message });
+    } finally {
+      setUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
+  };
+
+  const addUrl = () => {
+    const value = urlInput.trim();
+    if (!value) return;
+    if (imageInputs.length >= 12) {
+      toast.error("You can add up to 12 images");
+      return;
+    }
+    setImageInputs((prev) => [...prev, value]);
+    setUrlInput("");
+  };
 
   const submit = handleSubmit(async (values) => {
     await onSubmit(values);
@@ -162,37 +193,88 @@ export function PropertyForm({
         <h2 className="border-b border-border pb-2 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
           Images
         </h2>
-        {imageInputs.map((value, index) => (
-          <div key={index} className="flex items-start gap-2">
-            <div className="flex-1">
-              <Input
-                placeholder="https://example.com/photo.jpg"
-                value={value}
-                onChange={(e) => updateImage(index, e.target.value)}
-                aria-invalid={!!errors.images?.[index]}
-              />
-              <FormError message={errors.images?.[index]?.message} />
-            </div>
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              className="mt-0.5 text-red-500 hover:bg-red-50 hover:text-red-600 dark:text-red-400 dark:hover:bg-red-950 dark:hover:text-red-300"
-              onClick={() => removeImage(index)}
-              aria-label={`Remove image ${index + 1}`}
-            >
-              <Trash2 className="h-4 w-4" />
+
+        {imageInputs.length > 0 && (
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
+            {imageInputs.map((url, index) => (
+              <div key={index} className="group relative overflow-hidden rounded-lg border border-border bg-muted">
+                {url ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={url}
+                    alt={`Image ${index + 1}`}
+                    className="aspect-[4/3] w-full object-cover"
+                  />
+                ) : (
+                  <div className="flex aspect-[4/3] items-center justify-center">
+                    <ImageIcon className="h-8 w-8 text-muted-foreground/40" />
+                  </div>
+                )}
+                <button
+                  type="button"
+                  onClick={() => removeImage(index)}
+                  className="absolute right-1.5 top-1.5 rounded-full bg-black/60 p-1 text-white opacity-0 transition-opacity group-hover:opacity-100"
+                  aria-label={`Remove image ${index + 1}`}
+                >
+                  <X className="h-3.5 w-3.5" />
+                </button>
+                <div className="absolute bottom-0 left-0 right-0 bg-black/50 px-2 py-1 text-[10px] text-white/80">
+                  #{index + 1}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          multiple
+          className="hidden"
+          onChange={(e) => handleFiles(e.target.files)}
+        />
+
+        <div className="flex flex-wrap items-center gap-2">
+          <Button
+            type="button"
+            variant="outline"
+            disabled={uploading || imageInputs.length >= 12}
+            onClick={() => fileInputRef.current?.click()}
+          >
+            {uploading ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <Upload className="h-4 w-4" />
+            )}
+            {uploading ? "Uploading..." : "Upload images"}
+          </Button>
+
+          <span className="text-xs text-muted-foreground">or</span>
+
+          <div className="flex items-center gap-1.5">
+            <Input
+              placeholder="Paste image URL"
+              value={urlInput}
+              onChange={(e) => setUrlInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  addUrl();
+                }
+              }}
+              className="w-56 text-xs"
+            />
+            <Button type="button" variant="outline" size="sm" onClick={addUrl} disabled={!urlInput.trim()}>
+              <Link2 className="h-3.5 w-3.5" />
             </Button>
           </div>
-        ))}
+        </div>
+
+        <p className="text-xs text-muted-foreground">
+          {imageInputs.length}/12 images. Max 6 files per upload, JPG/PNG/WebP.
+        </p>
         <FormError message={errors.images?.root?.message} />
-        <Button
-          type="button"
-          variant="outline"
-          onClick={addImage}
-        >
-          <Plus className="h-4 w-4" /> Add image URL
-        </Button>
       </section>
 
       <section className="space-y-4">

@@ -16,6 +16,7 @@ const BACKEND_AUTH_PATHS = [
   "/api/auth/register",
   "/api/auth/me",
   "/api/auth/refresh-token",
+  "/api/auth/profile-image",
 ];
 
 const nextConfig: NextConfig = {
@@ -27,6 +28,10 @@ const nextConfig: NextConfig = {
     {
       protocol: "https",
       hostname: "images.unsplash.com",
+    },
+    {
+      protocol: "https",
+      hostname: "res.cloudinary.com",
     },
   ],
   },
